@@ -76,4 +76,38 @@ export function MigrationMethodStats({
       </div>
 
       <div className="flex flex-col">
-        \
+        <div className="text-sm text-gray-500 flex items-center gap-1">
+          پیچیدگی
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <InfoIcon className="h-3.5 w-3.5 text-gray-400" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="text-xs">سطح پیچیدگی این روش مهاجرتی</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+        <div className="font-medium">{getComplexityText(complexity)}</div>
+      </div>
+
+      <div className="flex flex-col">
+        <div className="text-sm text-gray-500 flex items-center gap-1">
+          هزینه متوسط
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <InfoIcon className="h-3.5 w-3.5 text-gray-400" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="text-xs">هزینه متوسط این روش مهاجرتی</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+        <div className="font-medium">{averageCost}</div>
+      </div>
+    </div>
+  )
+}
