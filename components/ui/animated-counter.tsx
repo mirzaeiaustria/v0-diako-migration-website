@@ -51,7 +51,7 @@ export function AnimatedCounter({
   return (
     <span ref={ref} className={className}>
       {prefix}
-      {count.toLocaleString("fa-IR")}
+      {typeof count === "number" ? count.toLocaleString("fa-IR") : "0"}
       {suffix}
     </span>
   )
