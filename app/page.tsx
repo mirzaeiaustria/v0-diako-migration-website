@@ -405,6 +405,75 @@ export default function DiacoHomePage() {
         </div>
       </ParallaxSection>
 
+      {/* Newsletter Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <ScrollReveal direction="up">
+            <div
+              id="newsletter"
+              className="bg-gradient-to-br from-blue-700 to-blue-800 text-white rounded-2xl p-8 md:p-12 shadow-2xl"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <motion.div
+                  initial={{ opacity: 0, x: -50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6 }}
+                  viewport={{ once: true }}
+                >
+                  <h2 className="text-3xl font-bold mb-4">از آخرین اخبار جا نمانید!</h2>
+                  <p className="text-blue-200 text-lg leading-relaxed">
+                    با عضویت در خبرنامه دیاکو، جدیدترین تحلیل‌ها، اخبار و فرصت‌های مهاجرتی را در ایمیل خود دریافت کنید.
+                  </p>
+                  <div className="mt-6 flex items-center space-x-4 space-x-reverse">
+                    <div className="flex items-center text-blue-200">
+                      <MessageSquare className="w-5 h-5 ml-2" />
+                      <span className="text-sm">هفتگی ارسال می‌شود</span>
+                    </div>
+                    <div className="flex items-center text-blue-200">
+                      <Shield className="w-5 h-5 ml-2" />
+                      <span className="text-sm">حریم خصوصی محفوظ</span>
+                    </div>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, x: 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  viewport={{ once: true }}
+                >
+                  <form className="flex flex-col sm:flex-row gap-4">
+                    <motion.input
+                      type="email"
+                      placeholder="آدرس ایمیل شما"
+                      className="w-full px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300"
+                      required
+                      whileFocus={{ scale: 1.02 }}
+                    />
+                    <motion.button
+                      type="submit"
+                      className="bg-yellow-400 text-blue-900 font-bold px-6 py-3 rounded-lg hover:bg-yellow-500 transition-all duration-300 shrink-0 shadow-lg"
+                      whileHover={{ scale: 1.05, boxShadow: "0 10px 25px rgba(0,0,0,0.2)" }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      عضویت در خبرنامه
+                    </motion.button>
+                  </form>
+
+                  <div className="mt-4 text-sm text-blue-200">
+                    با عضویت، شما با{" "}
+                    <Link href="#" className="underline hover:text-white transition-colors">
+                      شرایط و قوانین
+                    </Link>{" "}
+                    ما موافقت می‌کنید.
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
       {/* Contact Section */}
       <section
         className="py-20 bg-gradient-to-br from-teal-600 to-blue-700 text-white relative overflow-hidden"
