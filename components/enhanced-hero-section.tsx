@@ -1,99 +1,163 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
+import {
+  Brain,
+  Video,
+  Map,
+  Calculator,
+  TrendingUp,
+  Users,
+  Award,
+  Globe,
+  CheckCircle,
+  ArrowRight,
+  Sparkles,
+  Zap,
+  Target,
+} from "lucide-react"
+import { AnimatePresence } from "framer-motion"
+
 import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Brain, Video, Map, Users, Award, Globe, Clock, ArrowRight, Sparkles, Shield } from "lucide-react"
-import { AnimatedCounter } from "@/components/ui/animated-counter"
 import { FloatingParticles } from "@/components/ui/floating-particles"
-import { ScrollReveal } from "@/components/ui/scroll-reveal"
+import { AnimatedCounter } from "@/components/ui/animated-counter"
 import { GradientText } from "@/components/ui/gradient-text"
-import { InteractiveCard } from "@/components/ui/interactive-card"
 
 const heroFeatures = [
   {
     icon: Brain,
-    title: "هوش مصنوعی پیشرفته",
-    description: "تحلیل هوشمند شرایط شما",
+    title: "ارزیابی هوشمند",
+    description: "تحلیل دقیق شرایط شما با هوش مصنوعی",
     color: "from-blue-500 to-cyan-500",
   },
   {
-    icon: Sparkles,
-    title: "ویزارد انتخاب روش",
-    description: "پیشنهاد بهترین مسیر مهاجرت",
+    icon: Calculator,
+    title: "محاسبه‌گر هزینه",
+    description: "برآورد دقیق هزینه‌های مهاجرت",
     color: "from-purple-500 to-pink-500",
   },
   {
     icon: Map,
     title: "نقشه تعاملی",
-    description: "بررسی کشورهای مهاجرپذیر",
-    color: "from-green-500 to-emerald-500",
+    description: "کاوش کشورهای مهاجرپذیر",
+    color: "from-green-500 to-teal-500",
   },
   {
-    icon: Shield,
-    title: "امنیت بالا",
-    description: "حفاظت کامل اطلاعات شما",
+    icon: Target,
+    title: "مشاوره شخصی",
+    description: "راهنمایی تخصصی برای هر فرد",
     color: "from-orange-500 to-red-500",
   },
 ]
 
 const statistics = [
   {
-    icon: Users,
-    value: 5000,
-    suffix: "+",
-    label: "متقاضی موفق سالانه",
-    color: "text-blue-600",
-  },
-  {
-    icon: Award,
+    label: "نرخ موفقیت",
     value: 95,
     suffix: "%",
-    label: "نرخ موفقیت پرونده‌ها",
+    icon: CheckCircle,
     color: "text-green-600",
+    description: "پرونده‌های موفق",
   },
   {
-    icon: Globe,
-    value: 15,
-    suffix: "+",
-    label: "کشور تحت پوشش",
-    color: "text-purple-600",
-  },
-  {
-    icon: Clock,
+    label: "سال تجربه",
     value: 10,
     suffix: "+",
-    label: "سال سابقه فعالیت",
+    icon: Award,
+    color: "text-blue-600",
+    description: "در صنعت مهاجرت",
+  },
+  {
+    label: "کشور تحت پوشش",
+    value: 15,
+    suffix: "+",
+    icon: Globe,
     color: "text-orange-600",
+    description: "مقاصد مهاجرتی",
+  },
+  {
+    label: "مشتری موفق",
+    value: 5000,
+    suffix: "+",
+    icon: Users,
+    color: "text-purple-600",
+    description: "در سال گذشته",
   },
 ]
 
-const floatingWords = ["مهاجرت تحصیلی", "مهاجرت کاری", "آوسبیلدونگ", "سرمایه‌گذاری", "مشاوره تخصصی", "ویزای اروپا"]
+const quickActions = [
+  {
+    title: "ارزیابی رایگان",
+    description: "شرایط خود را ارزیابی کنید",
+    icon: Brain,
+    action: "assessment",
+    color: "bg-blue-600",
+    hoverColor: "hover:bg-blue-700",
+  },
+  {
+    title: "مشاوره آنلاین",
+    description: "با کارشناس صحبت کنید",
+    icon: Video,
+    action: "consultation",
+    color: "bg-green-600",
+    hoverColor: "hover:bg-green-700",
+  },
+  {
+    title: "محاسبه هزینه",
+    description: "هزینه‌های مهاجرت را بدانید",
+    icon: Calculator,
+    action: "calculator",
+    color: "bg-purple-600",
+    hoverColor: "hover:bg-purple-700",
+  },
+]
 
 export function EnhancedHeroSection() {
-  const [currentWordIndex, setCurrentWordIndex] = useState(0)
+  const [isVisible, setIsVisible] = useState(false)
+  const [currentTestimonial, setCurrentTestimonial] = useState(0)
 
   useEffect(() => {
+    setIsVisible(true)
     const interval = setInterval(() => {
-      setCurrentWordIndex((prev) => (prev + 1) % floatingWords.length)
-    }, 3000)
-
+      setCurrentTestimonial((prev) => (prev + 1) % 3)
+    }, 5000)
     return () => clearInterval(interval)
   }, [])
 
-  return (
-    <section className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
-      {/* Background Effects */}
-      <div className="absolute inset-0">
-        <FloatingParticles count={30} />
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 to-teal-600/5" />
-      </div>
+  const testimonials = [
+    {
+      text: "دیاکو بهترین تصمیم زندگی‌ام بود. الان در کانادا زندگی می‌کنم و خیلی راضی‌ام.",
+      author: "علی رضایی",
+      location: "تورنتو، کانادا",
+      method: "Express Entry",
+    },
+    {
+      text: "با کمک تیم دیاکو موفق به اخذ آوسبیلدونگ در آلمان شدم. فرآیند خیلی راحت بود.",
+      author: "مریم احمدی",
+      location: "برلین، آلمان",
+      method: "آوسبیلدونگ",
+    },
+    {
+      text: "سرمایه‌گذاری در پرتغال با راهنمایی دیاکو بسیار موفقیت‌آمیز بود.",
+      author: "حسین کریمی",
+      location: "لیسبون، پرتغال",
+      method: "Golden Visa",
+    },
+  ]
 
-      {/* Animated Background Shapes */}
-      <div className="absolute inset-0 overflow-hidden">
+  return (
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
+      {/* Background Elements */}
+      <div className="absolute inset-0">
+        <FloatingParticles count={60} />
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-teal-600/5" />
+
+        {/* Animated Background Shapes */}
         <motion.div
-          className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-3xl"
+          className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-3xl"
           animate={{
             scale: [1, 1.2, 1],
             rotate: [0, 180, 360],
@@ -105,7 +169,7 @@ export function EnhancedHeroSection() {
           }}
         />
         <motion.div
-          className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl"
+          className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl"
           animate={{
             scale: [1.2, 1, 1.2],
             rotate: [360, 180, 0],
@@ -119,200 +183,231 @@ export function EnhancedHeroSection() {
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        {/* Header */}
-        <motion.header
-          className="py-6"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="flex items-center justify-between">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left Column - Main Content */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : -50 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="text-center lg:text-right"
+          >
+            {/* Badge */}
             <motion.div
-              className="flex items-center space-x-4 space-x-reverse"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.2 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 mb-6 border border-blue-200"
             >
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-xl">د</span>
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">هلدینگ مهاجرتی دیاکو</h1>
-                <p className="text-sm text-gray-600">سامانه هوشمند مهاجرت</p>
-              </div>
+              <Sparkles className="w-4 h-4 text-blue-600" />
+              <span className="text-sm font-medium text-gray-700">سامانه هوشمند مهاجرت</span>
+              <Badge className="bg-blue-600 text-white text-xs">جدید</Badge>
             </motion.div>
 
-            <nav className="hidden md:flex items-center space-x-8 space-x-reverse">
-              {["خانه", "خدمات", "کشورها", "ویزارد مهاجرت", "تماس با ما"].map((item, index) => (
-                <motion.a
-                  key={item}
-                  href="#"
-                  className="text-gray-700 hover:text-blue-600 transition-colors relative"
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  whileHover={{ y: -2 }}
+            {/* Main Headline */}
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight"
+            >
+              مهاجرت هوشمند با
+              <br />
+              <GradientText className="bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600">دیاکو</GradientText>
+            </motion.h1>
+
+            {/* Subtitle */}
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0"
+            >
+              اولین پلتفرم مبتنی بر هوش مصنوعی برای مهاجرت به اروپا
+              <br />
+              <span className="text-blue-600 font-semibold">بیش از 95% نرخ موفقیت</span> در پرونده‌های مهاجرتی
+            </motion.p>
+
+            {/* Quick Action Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="flex flex-col sm:flex-row gap-4 mb-12 justify-center lg:justify-start"
+            >
+              {quickActions.map((action, index) => (
+                <motion.div
+                  key={action.action}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
                 >
-                  {item}
-                  <motion.div
-                    className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600"
-                    whileHover={{ width: "100%" }}
-                    transition={{ duration: 0.3 }}
-                  />
-                </motion.a>
-              ))}
-            </nav>
-
-            <motion.div
-              className="flex items-center space-x-4 space-x-reverse"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              <Button variant="outline" size="sm" className="hover:scale-105 transition-transform">
-                ورود
-              </Button>
-              <Button
-                size="sm"
-                className="bg-gradient-to-r from-blue-600 to-teal-600 hover:scale-105 transition-transform"
-              >
-                مشاوره رایگان
-              </Button>
-            </motion.div>
-          </div>
-        </motion.header>
-
-        {/* Main Hero Content */}
-        <div className="flex flex-col lg:flex-row items-center justify-between py-20 gap-12">
-          {/* Left Content */}
-          <div className="flex-1 text-center lg:text-right">
-            <ScrollReveal direction="up" delay={0.2}>
-              <Badge className="mb-6 bg-blue-100 text-blue-800 hover:bg-blue-200 transition-colors">
-                <Sparkles className="w-4 h-4 ml-1" />
-                جدید: سیستم هوش مصنوعی پیشرفته
-              </Badge>
-            </ScrollReveal>
-
-            <ScrollReveal direction="up" delay={0.4}>
-              <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-                سامانه هوشمند مهاجرت
-                <br />
-                <GradientText className="text-5xl md:text-7xl">دیاکو</GradientText>
-              </h1>
-            </ScrollReveal>
-
-            <ScrollReveal direction="up" delay={0.6}>
-              <div className="mb-8 h-16 flex items-center justify-center lg:justify-start">
-                <AnimatePresence mode="wait">
-                  <motion.p
-                    key={currentWordIndex}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.5 }}
-                    className="text-xl text-gray-600 font-medium"
+                  <Button
+                    size="lg"
+                    className={`${action.color} ${action.hoverColor} text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300`}
                   >
-                    متخصص در {floatingWords[currentWordIndex]}
-                  </motion.p>
-                </AnimatePresence>
-              </div>
-            </ScrollReveal>
-
-            <ScrollReveal direction="up" delay={0.8}>
-              <p className="text-lg text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                پلتفرم جامع و هوشمند مهاجرت با بیش از 10 سال سابقه و +35 کارشناس مجرب
-                <br />
-                ارائه اطلاعات دقیق، به‌روز و شخصی‌سازی شده برای مهاجرت به اروپا
-              </p>
-            </ScrollReveal>
-
-            <ScrollReveal direction="up" delay={1}>
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-12">
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Button size="lg" className="bg-gradient-to-r from-blue-600 to-teal-600 text-lg px-8 py-4 shadow-lg">
-                    <Brain className="w-5 h-5 ml-2" />
-                    ارزیابی هوشمند رایگان
-                    <ArrowRight className="w-5 h-5 mr-2" />
+                    <action.icon className="w-5 h-5 ml-2" />
+                    <div className="text-right">
+                      <div className="font-semibold">{action.title}</div>
+                      <div className="text-xs opacity-90">{action.description}</div>
+                    </div>
                   </Button>
                 </motion.div>
-
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Button variant="outline" size="lg" className="text-lg px-8 py-4 border-2">
-                    <Video className="w-5 h-5 ml-2" />
-                    مشاوره آنلاین
-                  </Button>
-                </motion.div>
-              </div>
-            </ScrollReveal>
+              ))}
+            </motion.div>
 
             {/* Statistics */}
-            <ScrollReveal direction="up" delay={1.2}>
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                {statistics.map((stat, index) => (
-                  <InteractiveCard key={index} className="text-center">
-                    <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-lg">
-                      <stat.icon className={`w-8 h-8 mx-auto mb-3 ${stat.color}`} />
-                      <div className={`text-3xl font-bold ${stat.color} mb-1`}>
-                        <AnimatedCounter from={0} to={stat.value} suffix={stat.suffix} />
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="grid grid-cols-2 lg:grid-cols-4 gap-6"
+            >
+              {statistics.map((stat, index) => (
+                <motion.div key={index} whileHover={{ scale: 1.05 }} className="text-center">
+                  <Card className="bg-white/60 backdrop-blur-sm border-white/20 shadow-lg hover:shadow-xl transition-all duration-300">
+                    <CardContent className="p-4">
+                      <stat.icon className={`w-8 h-8 mx-auto mb-2 ${stat.color}`} />
+                      <div className="text-2xl font-bold text-gray-900 mb-1">
+                        <AnimatedCounter end={stat.value} suffix={stat.suffix} />
                       </div>
-                      <div className="text-sm text-gray-600">{stat.label}</div>
-                    </div>
-                  </InteractiveCard>
-                ))}
-              </div>
-            </ScrollReveal>
-          </div>
+                      <div className="text-sm font-medium text-gray-700 mb-1">{stat.label}</div>
+                      <div className="text-xs text-gray-500">{stat.description}</div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </motion.div>
+          </motion.div>
 
-          {/* Right Content - Features */}
-          <div className="flex-1 max-w-lg">
-            <ScrollReveal direction="left" delay={1.4}>
-              <div className="grid grid-cols-1 gap-6">
-                {heroFeatures.map((feature, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: 50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6, delay: 1.4 + index * 0.2 }}
-                  >
-                    <InteractiveCard>
-                      <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/30 shadow-lg">
-                        <div className="flex items-center space-x-4 space-x-reverse">
-                          <div
-                            className={`w-12 h-12 bg-gradient-to-r ${feature.color} rounded-xl flex items-center justify-center shadow-lg`}
-                          >
-                            <feature.icon className="w-6 h-6 text-white" />
-                          </div>
-                          <div className="flex-1">
-                            <h3 className="font-semibold text-gray-900 mb-1">{feature.title}</h3>
-                            <p className="text-sm text-gray-600">{feature.description}</p>
-                          </div>
-                        </div>
+          {/* Right Column - Interactive Features */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : 50 }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+            className="space-y-6"
+          >
+            {/* Featured Card - AI Assessment */}
+            <motion.div whileHover={{ scale: 1.02, y: -5 }} transition={{ duration: 0.3 }}>
+              <Card className="bg-gradient-to-br from-blue-600 to-teal-600 text-white border-0 shadow-2xl overflow-hidden">
+                <CardContent className="p-8">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+                      <Brain className="w-8 h-8" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold">ارزیابی هوشمند رایگان</h3>
+                      <p className="text-blue-100">در کمتر از 5 دقیقه</p>
+                    </div>
+                  </div>
+                  <p className="text-blue-100 mb-6 leading-relaxed">
+                    هوش مصنوعی ما بر اساس اطلاعات شما، بهترین مسیر مهاجرت را پیشنهاد می‌دهد و احتمال موفقیت شما را محاسبه
+                    می‌کند.
+                  </p>
+                  <Button className="w-full bg-white text-blue-600 hover:bg-blue-50 font-semibold py-3">
+                    شروع ارزیابی رایگان
+                    <ArrowRight className="w-5 h-5 mr-2" />
+                  </Button>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Feature Grid */}
+            <div className="grid grid-cols-2 gap-4">
+              {heroFeatures.map((feature, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7 + index * 0.1 }}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                >
+                  <Card className="bg-white/70 backdrop-blur-sm border-white/30 shadow-lg hover:shadow-xl transition-all duration-300 h-full">
+                    <CardContent className="p-6 text-center">
+                      <div
+                        className={`w-12 h-12 bg-gradient-to-r ${feature.color} rounded-full flex items-center justify-center mx-auto mb-4`}
+                      >
+                        <feature.icon className="w-6 h-6 text-white" />
                       </div>
-                    </InteractiveCard>
-                  </motion.div>
-                ))}
-              </div>
-            </ScrollReveal>
-          </div>
+                      <h4 className="font-semibold text-gray-900 mb-2">{feature.title}</h4>
+                      <p className="text-sm text-gray-600">{feature.description}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Testimonial Carousel */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1 }}>
+              <Card className="bg-white/70 backdrop-blur-sm border-white/30 shadow-lg">
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <TrendingUp className="w-5 h-5 text-green-600" />
+                    <span className="text-sm font-medium text-green-600">داستان موفقیت</span>
+                  </div>
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={currentTestimonial}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <blockquote className="text-gray-700 mb-4 italic">
+                        "{testimonials[currentTestimonial].text}"
+                      </blockquote>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="font-semibold text-gray-900">{testimonials[currentTestimonial].author}</div>
+                          <div className="text-sm text-gray-500">{testimonials[currentTestimonial].location}</div>
+                        </div>
+                        <Badge variant="outline" className="text-xs">
+                          {testimonials[currentTestimonial].method}
+                        </Badge>
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
+
+                  {/* Testimonial Indicators */}
+                  <div className="flex justify-center gap-2 mt-4">
+                    {testimonials.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentTestimonial(index)}
+                        className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                          index === currentTestimonial ? "bg-blue-600 w-6" : "bg-gray-300"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </motion.div>
         </div>
 
-        {/* Scroll Indicator */}
+        {/* Trust Indicators */}
         <motion.div
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 2 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2 }}
+          className="mt-16 text-center"
         >
-          <motion.div
-            className="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center"
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-          >
-            <motion.div
-              className="w-1 h-3 bg-gray-400 rounded-full mt-2"
-              animate={{ y: [0, 12, 0] }}
-              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-            />
-          </motion.div>
+          <p className="text-gray-500 mb-6">مورد اعتماد هزاران مهاجر موفق</p>
+          <div className="flex items-center justify-center gap-8 opacity-60">
+            {/* Trust badges/logos would go here */}
+            <div className="flex items-center gap-2">
+              <CheckCircle className="w-5 h-5 text-green-600" />
+              <span className="text-sm">مجوز رسمی</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Award className="w-5 h-5 text-blue-600" />
+              <span className="text-sm">ISO 27001</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Zap className="w-5 h-5 text-yellow-600" />
+              <span className="text-sm">پردازش سریع</span>
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>
