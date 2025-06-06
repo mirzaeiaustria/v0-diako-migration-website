@@ -1,20 +1,33 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { storage } from "@/lib/db/storage"
+import { insertConsultationRequestSchema } from "@/lib/db/schema"
+import { z } from "zod"
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
+    const validatedData = insertConsultationRequestSchema.parse(body)
 
-    // Here you would typically save to database
-    const consultationRequest = {
-      id: Date.now(),
-      ...body,
-      isHandled: false,
-      createdAt: new Date().toISOString(),
-    }
+    const consultationRequest = await storage.createConsultationRequest(validatedData)
 
-    // Mock successful creation
     return NextResponse.json(consultationRequest, { status: 201 })
   } catch (error) {
-    return NextResponse.json({ error: "Invalid request body" }, { status: 400 })
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ error: "Invalid request data", details: error.errors }, { status: 400 })
+    }
+
+    console.error("Error creating consultation request:", error)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+  }
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    const consultationRequests = await storage.getConsultationRequests()
+
+    return NextResponse.json({ consultationRequests })
+  } catch (error) {
+    console.error("Error fetching consultation requests:", error)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
