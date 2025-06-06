@@ -11,11 +11,19 @@ import {
   Mail,
   CheckCircle,
   ArrowRight,
-  Play,
-  Search,
-  Star,
   Calendar,
   Clock,
+  Award,
+  Target,
+  Shield,
+  Zap,
+  BookOpen,
+  MessageSquare,
+  Video,
+  Calculator,
+  Map,
+  BarChart3,
+  Headphones,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -23,14 +31,10 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Progress } from "@/components/ui/progress"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
-// Import data from provided sources
-import { countries } from "@/lib/countries-migration-methods"
+import { MigrationMethodSelectorWizard } from "@/components/migration-method-selector-wizard"
+import { InteractiveWorldMap } from "@/components/interactive-world-map"
+import { MigrantExperiences } from "@/components/migrant-experiences"
 
 // Animation variants
 const fadeInUp = {
@@ -65,148 +69,166 @@ export default function DiacoHomePage() {
     setIsVisible(true)
   }, [])
 
-  const immigrationMethods = [
+  const services = [
     {
-      id: "apprenticeship",
-      title: "مهاجرت کاری از طریق کارورزی",
-      description: "دریافت جاب آفر تضمینی و اقامت کاری پس از کارورزی",
-      category: "work",
-      pros: [
-        "یکی از بهترین روش های مهاجرتی",
-        "آسان و کم هزینه",
-        "شانس ویزای بالا",
-        "حداقل مدرک دیپلم",
-        "بدون نیاز به مدرک زبان",
-      ],
-      cons: ["تا سقف سنی 42 سال", "دریافت حقوق نسبتا کم در دوران کارورزی"],
-    },
-    {
-      id: "study",
-      title: "مهاجرت از طریق تحصیل",
-      description: "پرطرفدارترین روش مهاجرتی",
-      category: "education",
-      pros: [
-        "شانس ویزای عالی",
-        "سریع، آسان و کم هزینه",
-        "دریافت اقامت کاری پس از تحصیل",
-        "امکان دریافت بورسیه و فاند",
-        "امکان کار دانشجویی در دوران تحصیل",
-      ],
-      cons: ["عدم امکان دریافت اقامت دائم هنگام تحصیل", "رقابت بالا در برخی از کشورها"],
+      id: "education",
+      title: "مهاجرت تحصیلی",
+      description: "پذیرش از بهترین دانشگاه‌های جهان و اخذ ویزای تحصیلی",
+      icon: BookOpen,
+      features: ["پذیرش تحصیلی", "بورسیه‌های تحصیلی", "ویزای تحصیلی", "مشاوره انتخاب رشته"],
+      countries: ["آلمان", "کانادا", "استرالیا", "انگلستان"],
+      color: "bg-blue-500",
     },
     {
       id: "work",
-      title: "مهاجرت از طریق کار",
-      description: "درآمد ارزی بالا و شانس ویزای بالا",
-      category: "work",
-      pros: [
-        "درآمد ارزی بالا",
-        "امکان اخذ اقامت دائم و پاسپورت",
-        "دریافت بیمه کاری، بازنشستگی و سلامت",
-        "حداکثر سن 45 سال",
-        "امکان الحاق همزمان خانواده",
-      ],
-      cons: ["نیازمند تخصص و سابقه شغلی", "داشتن رزومه خوب کاری", "محدودیت برای برخی از رشته ها"],
+      title: "مهاجرت کاری",
+      description: "اخذ ویزای کار و جاب آفر از کشورهای مختلف",
+      icon: Target,
+      features: ["ویزای کار", "جاب آفر تضمینی", "ارزیابی شرایط کاری", "کاریابی بین‌المللی"],
+      countries: ["آلمان", "کانادا", "استرالیا", "اتریش"],
+      color: "bg-green-500",
     },
     {
       id: "investment",
-      title: "خرید ملک، ثبت شرکت، استارت آپ و تمکن مالی",
-      description: "سریع ترین روش دریافت اقامت و پاسپورت",
-      category: "investment",
-      pros: [
-        "بدون محدودیت سنی",
-        "بدون نیاز به مدرک زبان",
-        "بدون نیاز به مدارک تحصیلی",
-        "امکان الحاق خانواده به صورت همزمان",
-        "شانس موفقیت بالا",
-      ],
-      cons: ["هزینه های بالاتر نسبت به سایر روش ها"],
+      title: "سرمایه‌گذاری و کارآفرینی",
+      description: "اقامت از طریق سرمایه‌گذاری و ثبت شرکت",
+      icon: TrendingUp,
+      features: ["خرید ملک", "ثبت شرکت", "سرمایه‌گذاری", "تمکن مالی"],
+      countries: ["ترکیه", "پرتغال", "یونان", "اسپانیا"],
+      color: "bg-purple-500",
+    },
+    {
+      id: "family",
+      title: "مهاجرت خانوادگی",
+      description: "ویزای پیوست به خانواده و الحاق اعضای خانواده",
+      icon: Users,
+      features: ["ویزای همراه", "ویزای والدین", "پیوستن به خانواده", "اسپانسرشیپ"],
+      countries: ["کانادا", "آمریکا", "استرالیا", "انگلستان"],
+      color: "bg-orange-500",
+    },
+    {
+      id: "ausbildung",
+      title: "آوسبیلدونگ آلمان",
+      description: "دوره‌های آموزشی حرفه‌ای و کارورزی در آلمان",
+      icon: Award,
+      features: ["آموزش حرفه‌ای", "کارورزی", "جاب آفر تضمینی", "اقامت کاری"],
+      countries: ["آلمان"],
+      color: "bg-red-500",
+    },
+    {
+      id: "language",
+      title: "مرکز آموزش زبان",
+      description: "دوره‌های آموزش زبان و آمادگی برای آزمون‌های بین‌المللی",
+      icon: MessageSquare,
+      features: ["آیلتس", "تافل", "PTE", "زبان آلمانی"],
+      countries: ["آنلاین", "حضوری"],
+      color: "bg-teal-500",
+    },
+  ]
+
+  const statistics = [
+    { label: "نرخ موفقیت پرونده‌های مهاجرتی", value: "95%", icon: CheckCircle, color: "text-green-600" },
+    { label: "سال سابقه فعالیت", value: "+10", icon: Award, color: "text-blue-600" },
+    { label: "کشورهای تحت پوشش", value: "+15", icon: Globe, color: "text-orange-600" },
+    { label: "متقاضیان موفق ساالنه", value: "+5,000", icon: Users, color: "text-purple-600" },
+  ]
+
+  const features = [
+    {
+      title: "مشاوره رایگان",
+      description: "مشاوره تخصصی رایگان با کارشناسان مجرب",
+      icon: Headphones,
+    },
+    {
+      title: "پیگیری آنلاین",
+      description: "پیگیری وضعیت پرونده از طریق پنل کاربری",
+      icon: BarChart3,
+    },
+    {
+      title: "تیم متخصص",
+      description: "بیش از 35 کارشناس و مشاور مجرب",
+      icon: Users,
+    },
+    {
+      title: "امنیت بالا",
+      description: "حفاظت کامل از اطلاعات شخصی شما",
+      icon: Shield,
+    },
+    {
+      title: "پردازش سریع",
+      description: "پردازش سریع و دقیق پرونده‌ها",
+      icon: Zap,
+    },
+    {
+      title: "پشتیبانی 24/7",
+      description: "پشتیبانی مداوم در تمام مراحل",
+      icon: Clock,
     },
   ]
 
   const successStories = [
     {
       name: "امیر حسینی",
-      age: 45,
-      method: "سرمایه‌گذاری",
-      country: "ایران به ترکیه",
-      year: 2020,
+      age: 32,
+      method: "مهاجرت کاری",
+      country: "ایران به کانادا",
+      year: 2023,
       image: "/placeholder.svg?height=80&width=80",
-      story: "من از طریق خرید ملک به ارزش 400,000 دلار در استانبول، اقامت ترکیه را دریافت کردم...",
-      tags: ["انتقال ملک مناسب", "اقامت تضمینی"],
+      story:
+        "من از طریق سیستم اکسپرس اینتری کانادا موفق به دریافت اقامت دائم شدم. تیم دیاکو در تمام مراحل همراه من بودند.",
+      tags: ["اکسپرس اینتری", "اقامت دائم", "تورنتو"],
     },
     {
       name: "مریم رضایی",
       age: 28,
-      method: "تحصیل",
-      country: "ایران به استرالیا",
-      year: 2019,
+      method: "مهاجرت تحصیلی",
+      country: "ایران به آلمان",
+      year: 2023,
       image: "/placeholder.svg?height=80&width=80",
-      story: "من برای تحصیل در مقطع کارشناسی ارشد رشته مدیریت پارکینگ به استرالیا مهاجرت کردم...",
-      tags: ["تعیین هزینه‌های تحصیل", "پذیرش از دانشگاه"],
+      story: "برای تحصیل در مقطع کارشناسی ارشد به آلمان رفتم. دیاکو کمک کرد تا بهترین دانشگاه را انتخاب کنم.",
+      tags: ["تحصیل", "آلمان", "مهندسی"],
     },
     {
       name: "علی محمدی",
-      age: 32,
-      method: "مهاجرت کاری",
-      country: "ایران به کانادا",
-      year: 2021,
+      age: 35,
+      method: "سرمایه‌گذاری",
+      country: "ایران به ترکیه",
+      year: 2022,
       image: "/placeholder.svg?height=80&width=80",
-      story: "من با مدرک کارشناسی ارشد مهندس کامپیوتر و 5 سال سابقه کار در زمینه توسعه نرم‌افزار...",
-      tags: ["ارزیابی مدارک تحصیلی", "جهیزیه مدارک سوابق کاری"],
+      story: "از طریق خرید ملک در استانبول، شهروندی ترکیه را دریافت کردم. فرآیند بسیار ساده و سریع بود.",
+      tags: ["سرمایه‌گذاری", "ملک", "شهروندی"],
     },
-  ]
-
-  const statistics = [
-    { label: "نرخ موفقیت پرونده‌های مهاجرتی", value: "85%", icon: CheckCircle, color: "text-green-600" },
-    { label: "پذیرش‌های مهاجرتی مختلف", value: "+30", icon: TrendingUp, color: "text-blue-600" },
-    { label: "کشورهای مهاجرتی مصوب", value: "+10", icon: Globe, color: "text-orange-600" },
-    { label: "متقاضیان مهاجرت ساالنه", value: "+10,000", icon: Users, color: "text-purple-600" },
-  ]
-
-  const migrationTrends = [
-    { country: "کانادا", percentage: 30, trend: "up" },
-    { country: "آلمان", percentage: 25, trend: "up" },
-    { country: "استرالیا", percentage: 15, trend: "stable" },
-    { country: "ترکیه", percentage: 10, trend: "up" },
-    { country: "سایر کشورها", percentage: 20, trend: "stable" },
   ]
 
   const articles = [
     {
-      title: "مهاجرت تحصیلی به آلمان، کدام کشور محبوب‌تر است؟",
-      excerpt: "بررسی مزایا و معایب مهاجرت تحصیلی به آلمان در مقایسه با سایر کشورهای اروپایی",
-      date: "1402/09/15",
-      readTime: "5 دقیقه",
+      title: "راهنمای کامل مهاجرت تحصیلی به آلمان 2024",
+      excerpt: "همه چیز که باید درباره مهاجرت تحصیلی به آلمان بدانید",
+      date: "1403/01/15",
+      readTime: "10 دقیقه",
       category: "مهاجرت تحصیلی",
       image: "/placeholder.svg?height=200&width=300",
-      tags: ["آلمان", "تحصیل", "اروپا"],
+      tags: ["آلمان", "تحصیل", "راهنما"],
     },
     {
-      title: "در آینده نزدیک به Medical Visa آلمان امیدوار باشید",
-      excerpt: "آخرین تغییرات در قوانین ویزای پزشکی آلمان و فرصت‌های جدید برای متقاضیان",
-      date: "1402/09/10",
+      title: "آخرین تغییرات قوانین مهاجرتی کانادا",
+      excerpt: "بررسی جدیدترین تغییرات در سیستم اکسپرس اینتری کانادا",
+      date: "1403/01/10",
       readTime: "7 دقیقه",
       category: "اخبار مهاجرت",
       image: "/placeholder.svg?height=200&width=300",
-      tags: ["ویزای پزشکی", "آلمان", "اخبار"],
+      tags: ["کانادا", "اکسپرس اینتری", "اخبار"],
     },
     {
-      title: "Residence Permit و اجازه اقامت Type D) آلمان",
-      excerpt: "راهنمای کامل دریافت اجازه اقامت آلمان و مراحل تبدیل ویزا به اقامت",
-      date: "1402/09/05",
-      readTime: "10 دقیقه",
-      category: "اقامت",
+      title: "مقایسه کشورهای اروپایی برای سرمایه‌گذاری",
+      excerpt: "بهترین کشورهای اروپایی برای سرمایه‌گذاری و اخذ اقامت",
+      date: "1403/01/05",
+      readTime: "12 دقیقه",
+      category: "سرمایه‌گذاری",
       image: "/placeholder.svg?height=200&width=300",
-      tags: ["اقامت", "آلمان", "راهنما"],
+      tags: ["اروپا", "سرمایه‌گذاری", "مقایسه"],
     },
   ]
-
-  const filteredCountries = countries.filter((country) => {
-    if (selectedCountry !== "all" && country.id !== selectedCountry) return false
-    if (searchTerm && !country.name.includes(searchTerm)) return false
-    return true
-  })
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50" dir="rtl">
@@ -219,8 +241,8 @@ export default function DiacoHomePage() {
                 <span className="text-white font-bold text-xl">د</span>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">دیاکو</h1>
-                <p className="text-sm text-gray-600">سامانه هوشمند مهاجرت</p>
+                <h1 className="text-xl font-bold text-gray-900">هلدینگ مهاجرتی دیاکو</h1>
+                <p className="text-sm text-gray-600">اندیشه راه زندگی</p>
               </div>
             </div>
 
@@ -228,11 +250,14 @@ export default function DiacoHomePage() {
               <Link href="#" className="text-gray-700 hover:text-blue-600 transition-colors">
                 خانه
               </Link>
+              <Link href="#services" className="text-gray-700 hover:text-blue-600 transition-colors">
+                خدمات
+              </Link>
               <Link href="#countries" className="text-gray-700 hover:text-blue-600 transition-colors">
                 کشورها
               </Link>
-              <Link href="#methods" className="text-gray-700 hover:text-blue-600 transition-colors">
-                روش‌های مهاجرتی
+              <Link href="#wizard" className="text-gray-700 hover:text-blue-600 transition-colors">
+                ویزارد مهاجرت
               </Link>
               <Link href="#articles" className="text-gray-700 hover:text-blue-600 transition-colors">
                 مقالات
@@ -247,7 +272,7 @@ export default function DiacoHomePage() {
                 ورود
               </Button>
               <Button size="sm" className="bg-gradient-to-r from-blue-600 to-teal-600">
-                ثبت نام
+                مشاوره رایگان
               </Button>
             </div>
           </div>
@@ -259,7 +284,7 @@ export default function DiacoHomePage() {
         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-teal-600/10"></div>
         <div className="container mx-auto px-4 relative">
           <motion.div
-            className="text-center max-w-4xl mx-auto"
+            className="text-center max-w-5xl mx-auto"
             initial="initial"
             animate="animate"
             variants={staggerContainer}
@@ -270,8 +295,9 @@ export default function DiacoHomePage() {
             </motion.h1>
 
             <motion.p className="text-xl text-gray-600 mb-8 leading-relaxed" variants={fadeInUp}>
-              یک شرکت مشاوره مهاجرتی بین المللی است که در ایران و اروپا فعالیت می کند. این دیاکو در زمینه مهاجرت تحصیلی،
-              کاری، سرمایه گذاری به متقاضیان ایرانی و خارجی فعالیت دارد.
+              پلتفرم جامع مهاجرتی با بیش از 10 سال سابقه و +35 کارشناس مجرب
+              <br />
+              مشاوره تخصصی برای مهاجرت تحصیلی، کاری، سرمایه‌گذاری و خانوادگی
             </motion.p>
 
             <motion.div
@@ -279,12 +305,16 @@ export default function DiacoHomePage() {
               variants={fadeInUp}
             >
               <Button size="lg" className="bg-gradient-to-r from-blue-600 to-teal-600 text-lg px-8 py-3">
-                <Play className="w-5 h-5 ml-2" />
-                شروع ویزارد انتخاب روش مهاجرتی
+                <Calculator className="w-5 h-5 ml-2" />
+                ارزیابی رایگان مهاجرت
               </Button>
               <Button variant="outline" size="lg" className="text-lg px-8 py-3">
-                مشاوره رایگان
-                <ArrowRight className="w-5 h-5 mr-2" />
+                <Video className="w-5 h-5 ml-2" />
+                مشاوره آنلاین
+              </Button>
+              <Button variant="outline" size="lg" className="text-lg px-8 py-3">
+                <Map className="w-5 h-5 ml-2" />
+                نقشه تعاملی کشورها
               </Button>
             </motion.div>
 
@@ -306,8 +336,8 @@ export default function DiacoHomePage() {
         </div>
       </section>
 
-      {/* Immigration Wizard Section */}
-      <section className="py-20 bg-white" id="methods">
+      {/* Services Section */}
+      <section className="py-20 bg-white" id="services">
         <div className="container mx-auto px-4">
           <motion.div
             initial="initial"
@@ -316,133 +346,125 @@ export default function DiacoHomePage() {
             variants={fadeInUp}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">ویزارد انتخاب روش مهاجرتی</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">خدمات جامع مهاجرتی</h2>
+            <p className="text-xl text-gray-600">ارائه کامل‌ترین خدمات مهاجرتی با تیم متخصص و مجرب</p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {services.map((service, index) => (
+              <motion.div
+                key={service.id}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <Card className="h-full hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                  <CardHeader>
+                    <div className="flex items-center space-x-3 space-x-reverse">
+                      <div className={`w-12 h-12 ${service.color} rounded-lg flex items-center justify-center`}>
+                        <service.icon className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-lg">{service.title}</CardTitle>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600 mb-4">{service.description}</p>
+
+                    <div className="space-y-3">
+                      <div>
+                        <div className="text-sm text-gray-600 mb-2">ویژگی‌ها:</div>
+                        <div className="flex flex-wrap gap-1">
+                          {service.features.map((feature, featureIndex) => (
+                            <Badge key={featureIndex} variant="outline" className="text-xs">
+                              {feature}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="text-sm text-gray-600 mb-2">کشورهای تحت پوشش:</div>
+                        <div className="flex flex-wrap gap-1">
+                          {service.countries.map((country, countryIndex) => (
+                            <Badge key={countryIndex} variant="secondary" className="text-xs">
+                              {country}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <Button variant="link" className="mt-4 p-0 h-auto text-blue-600 w-full justify-start">
+                      اطلاعات بیشتر
+                      <ArrowRight className="w-4 h-4 mr-1" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 bg-gradient-to-br from-blue-50 to-teal-50">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">چرا دیاکو؟</h2>
+            <p className="text-xl text-gray-600">مزایای همکاری با هلدینگ مهاجرتی دیاکو</p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="text-center"
+              >
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <feature.icon className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">{feature.title}</h3>
+                <p className="text-gray-600">{feature.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Migration Wizard Section */}
+      <section className="py-20 bg-white" id="wizard">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">ویزارد هوشمند انتخاب روش مهاجرت</h2>
             <p className="text-xl text-gray-600">
               با پاسخ به چند سوال ساده، بهترین روش مهاجرتی مناسب شرایط شما را پیدا کنید
             </p>
           </motion.div>
 
-          <div className="max-w-4xl mx-auto">
-            {/* Progress Bar */}
-            <div className="mb-8">
-              <div className="flex justify-between items-center mb-4">
-                {[1, 2, 3, 4, 5, 6].map((step) => (
-                  <div
-                    key={step}
-                    className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold ${
-                      step <= currentStep
-                        ? "bg-gradient-to-r from-blue-600 to-teal-600 text-white"
-                        : "bg-gray-200 text-gray-500"
-                    }`}
-                  >
-                    {step}
-                  </div>
-                ))}
-              </div>
-              <Progress value={(currentStep / 6) * 100} className="h-2" />
-            </div>
-
-            {/* Step 1: Immigration Method Selection */}
-            {currentStep === 1 && (
-              <motion.div
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="bg-gray-50 rounded-2xl p-8"
-              >
-                <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">کدام روش مهاجرت را ترجیح می دهید؟</h3>
-
-                <Accordion type="single" collapsible className="space-y-4 mb-8">
-                  {immigrationMethods.map((method) => (
-                    <AccordionItem key={method.id} value={method.id} className="border rounded-lg">
-                      <AccordionTrigger className="px-6 py-4 text-right hover:no-underline">
-                        <span className="font-semibold">{method.title}</span>
-                      </AccordionTrigger>
-                      <AccordionContent className="px-6 pb-4">
-                        <p className="text-gray-600 mb-4">{method.description}</p>
-                        <div className="grid md:grid-cols-2 gap-4">
-                          <div>
-                            <h4 className="font-semibold text-green-700 mb-2">مزایا:</h4>
-                            <ul className="space-y-1">
-                              {method.pros.map((pro, index) => (
-                                <li key={index} className="flex items-start text-sm">
-                                  <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 ml-2 flex-shrink-0" />
-                                  {pro}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                          <div>
-                            <h4 className="font-semibold text-red-700 mb-2">معایب:</h4>
-                            <ul className="space-y-1">
-                              {method.cons.map((con, index) => (
-                                <li key={index} className="flex items-start text-sm">
-                                  <span className="w-4 h-4 text-red-600 mt-0.5 ml-2 flex-shrink-0">×</span>
-                                  {con}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
-
-                <Select value={selectedMethod} onValueChange={setSelectedMethod}>
-                  <SelectTrigger className="w-full mb-6">
-                    <SelectValue placeholder="روش مهاجرت خود را انتخاب کنید" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {immigrationMethods.map((method) => (
-                      <SelectItem key={method.id} value={method.id}>
-                        {method.title}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                <div className="flex justify-between">
-                  <Button variant="outline" disabled>
-                    قبلی
-                  </Button>
-                  <Button
-                    onClick={() => setCurrentStep(2)}
-                    disabled={!selectedMethod}
-                    className="bg-gradient-to-r from-blue-600 to-teal-600"
-                  >
-                    بعدی
-                  </Button>
-                </div>
-              </motion.div>
-            )}
-
-            {/* Placeholder for other steps */}
-            {currentStep > 1 && (
-              <motion.div
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="bg-gray-50 rounded-2xl p-8 text-center"
-              >
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">مرحله {currentStep} از 6</h3>
-                <p className="text-gray-600 mb-8">این بخش در حال توسعه است و به زودی اضافه خواهد شد.</p>
-                <div className="flex justify-between">
-                  <Button variant="outline" onClick={() => setCurrentStep(currentStep - 1)}>
-                    قبلی
-                  </Button>
-                  <Button
-                    onClick={() => (currentStep < 6 ? setCurrentStep(currentStep + 1) : null)}
-                    className="bg-gradient-to-r from-blue-600 to-teal-600"
-                  >
-                    {currentStep === 6 ? "نمایش نتیجه" : "بعدی"}
-                  </Button>
-                </div>
-              </motion.div>
-            )}
-          </div>
+          <MigrationMethodSelectorWizard />
         </div>
       </section>
 
-      {/* Countries and Methods Section */}
+      {/* Interactive World Map Section */}
       <section className="py-20 bg-gradient-to-br from-blue-50 to-teal-50" id="countries">
         <div className="container mx-auto px-4">
           <motion.div
@@ -452,212 +474,16 @@ export default function DiacoHomePage() {
             variants={fadeInUp}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">کشورها و روش‌های مهاجرتی</h2>
-            <p className="text-xl text-gray-600">
-              اطلاعات جامع درباره کشورهای مهاجرپذیر و روش‌های مختلف مهاجرت به هر کشور
-            </p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">نقشه تعاملی کشورهای مهاجرپذیر</h2>
+            <p className="text-xl text-gray-600">اطلاعات جامع درباره کشورهای مهاجرپذیر و روش‌های مختلف مهاجرت</p>
           </motion.div>
 
-          {/* Search and Filter */}
-          <div className="max-w-2xl mx-auto mb-12">
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="relative flex-1">
-                <Search className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
-                <Input
-                  placeholder="جستجو در کشورها..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pr-10"
-                />
-              </div>
-              <Select value={selectedCountry} onValueChange={setSelectedCountry}>
-                <SelectTrigger className="w-full sm:w-48">
-                  <SelectValue placeholder="انتخاب قاره" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">همه قاره‌ها</SelectItem>
-                  <SelectItem value="europe">اروپا</SelectItem>
-                  <SelectItem value="americas">آمریکا</SelectItem>
-                  <SelectItem value="oceania">اقیانوسیه</SelectItem>
-                  <SelectItem value="asia">آسیا</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          {/* Countries Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCountries.slice(0, 12).map((country, index) => (
-              <motion.div
-                key={country.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 h-full">
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3 space-x-reverse">
-                        <div className="w-12 h-12 rounded-full overflow-hidden">
-                          <Image
-                            src={country.flagUrl || "/placeholder.svg"}
-                            alt={`پرچم ${country.name}`}
-                            width={48}
-                            height={48}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        <div>
-                          <CardTitle className="text-lg">{country.name}</CardTitle>
-                          <Badge variant="secondary" className="text-xs">
-                            رتبه {country.popularityRank}
-                          </Badge>
-                        </div>
-                      </div>
-                      <div className="flex items-center">
-                        <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                        <span className="text-sm text-gray-600 mr-1">
-                          {(5 - (country.popularityRank - 1) * 0.5).toFixed(1)}
-                        </span>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">{country.description}</p>
-
-                    <div className="space-y-3">
-                      <div>
-                        <div className="text-sm text-gray-600 mb-2">روش‌های مهاجرتی:</div>
-                        <div className="flex flex-wrap gap-1">
-                          {country.migrationMethods.slice(0, 3).map((method, methodIndex) => (
-                            <Badge key={methodIndex} variant="outline" className="text-xs">
-                              {method.title.length > 15 ? method.title.substring(0, 15) + "..." : method.title}
-                            </Badge>
-                          ))}
-                          {country.migrationMethods.length > 3 && (
-                            <Badge variant="outline" className="text-xs">
-                              +{country.migrationMethods.length - 3} روش دیگر
-                            </Badge>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    <Button variant="link" className="mt-4 p-0 h-auto text-blue-600 w-full justify-start">
-                      مطالعه جزئیات و روش‌های مهاجرتی
-                      <ArrowRight className="w-4 h-4 mr-1" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <Button variant="outline" size="lg">
-              مشاهده همه کشورها ({countries.length} کشور)
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Migration Statistics and Trends */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">آمار و ارقام مهاجرتی</h2>
-            <p className="text-xl text-gray-600">آمار و اطلاعات مهاجرتی کشورهای مختلف و روش‌های مهاجرت</p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-12">
-            {/* Migration Trends Chart */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">محبوب‌ترین کشورهای مقصد مهاجرتی</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {migrationTrends.map((trend, index) => (
-                    <div key={index} className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3 space-x-reverse">
-                        <span className="text-sm font-medium">{trend.country}</span>
-                        <div className="flex items-center">
-                          {trend.trend === "up" ? (
-                            <TrendingUp className="w-4 h-4 text-green-600" />
-                          ) : (
-                            <div className="w-4 h-4 bg-gray-400 rounded-full"></div>
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-2 space-x-reverse">
-                        <div className="w-24 bg-gray-200 rounded-full h-2">
-                          <div
-                            className="bg-gradient-to-r from-blue-600 to-teal-600 h-2 rounded-full"
-                            style={{ width: `${trend.percentage}%` }}
-                          ></div>
-                        </div>
-                        <span className="text-sm text-gray-600">{trend.percentage}%</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Recent Migration News */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">روندهای مهاجرتی در سال 2023</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                    <div>
-                      <div className="font-medium text-green-800">مهاجران تحصیلی</div>
-                      <div className="text-sm text-green-600">افزایش 15% نسبت به سال قبل</div>
-                    </div>
-                    <div className="text-2xl font-bold text-green-700">1</div>
-                  </div>
-
-                  <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
-                    <div>
-                      <div className="font-medium text-blue-800">مهاجران کاری</div>
-                      <div className="text-sm text-blue-600">افزایش 8% نسبت به سال قبل</div>
-                    </div>
-                    <div className="text-2xl font-bold text-blue-700">2</div>
-                  </div>
-
-                  <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
-                    <div>
-                      <div className="font-medium text-orange-800">مهاجران سرمایه‌گذار</div>
-                      <div className="text-sm text-orange-600">افزایش 25% نسبت به سال قبل</div>
-                    </div>
-                    <div className="text-2xl font-bold text-orange-700">3</div>
-                  </div>
-
-                  <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
-                    <div>
-                      <div className="font-medium text-purple-800">ویزای استعداد</div>
-                      <div className="text-sm text-purple-600">افزایش 30% نسبت به سال قبل</div>
-                    </div>
-                    <div className="text-2xl font-bold text-purple-700">4</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <InteractiveWorldMap />
         </div>
       </section>
 
       {/* Success Stories */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 to-teal-50">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <motion.div
             initial="initial"
@@ -726,8 +552,15 @@ export default function DiacoHomePage() {
         </div>
       </section>
 
+      {/* Migrant Experiences Section */}
+      <section className="py-20 bg-gradient-to-br from-blue-50 to-teal-50">
+        <div className="container mx-auto px-4">
+          <MigrantExperiences />
+        </div>
+      </section>
+
       {/* Articles Section */}
-      <section className="py-20 bg-gray-50" id="articles">
+      <section className="py-20 bg-white" id="articles">
         <div className="container mx-auto px-4">
           <motion.div
             initial="initial"
@@ -736,8 +569,8 @@ export default function DiacoHomePage() {
             variants={fadeInUp}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">مقالات تخصصی مهاجرت</h2>
-            <p className="text-xl text-gray-600">آخرین مقالات و راهنماهای تخصصی در زمینه مهاجرت و روش‌های مختلف آن</p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">مرکز دانش و مقالات تخصصی</h2>
+            <p className="text-xl text-gray-600">آخرین مقالات و راهنماهای تخصصی در زمینه مهاجرت</p>
           </motion.div>
 
           <Tabs defaultValue="all" className="w-full">
@@ -843,11 +676,11 @@ export default function DiacoHomePage() {
             variants={fadeInUp}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold mb-4">هلدینگ مهاجرتی دیاکو (اندیشه راه زندگی)</h2>
-            <p className="text-xl text-teal-100 max-w-3xl mx-auto">
-              یک شرکت مشاوره مهاجرتی بین المللی است که در ایران و اروپا فعالیت می کند. این دیاکو در زمینه مهاجرت تحصیلی،
-              کاری، سرمایه گذاری به متقاضیان ایرانی و خارجی فعالیت دارد. دفتر مرکزی دیاکو در تهران واقع شده است و دارای
-              شعبه هایی در قبرس، اسپانیا می باشد.
+            <h2 className="text-4xl font-bold mb-4">هلدینگ مهاجرتی دیاکو</h2>
+            <p className="text-xl text-teal-100 max-w-4xl mx-auto">
+              شرکت مشاوره مهاجرتی بین‌المللی با فعالیت در ایران و اروپا
+              <br />
+              ارائه خدمات مهاجرت تحصیلی، کاری و سرمایه‌گذاری به متقاضیان ایرانی و خارجی
             </p>
           </motion.div>
 
@@ -856,13 +689,13 @@ export default function DiacoHomePage() {
             whileInView="animate"
             viewport={{ once: true }}
             variants={staggerContainer}
-            className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+            className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
           >
             {[
-              { phone: "09306229790", icon: Phone },
+              { phone: "021-9169-3955", icon: Phone },
               { phone: "021-8807-3287", icon: Phone },
               { phone: "021-8809-5702", icon: Phone },
-              { phone: "021-9169-3955", icon: Phone },
+              { phone: "09306229790", icon: Phone },
             ].map((contact, index) => (
               <motion.div
                 key={index}
@@ -880,9 +713,9 @@ export default function DiacoHomePage() {
             whileInView="animate"
             viewport={{ once: true }}
             variants={fadeInUp}
-            className="text-center mt-12"
+            className="text-center"
           >
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-8">
               <div className="flex items-center space-x-2 space-x-reverse">
                 <Globe className="w-5 h-5" />
                 <span>DIACO.EU</span>
@@ -891,6 +724,21 @@ export default function DiacoHomePage() {
                 <Globe className="w-5 h-5" />
                 <span>DIACO.CONSULTING</span>
               </div>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-4">
+              <Button variant="outline" className="text-white border-white hover:bg-white hover:text-blue-600">
+                <MessageSquare className="w-4 h-4 ml-2" />
+                تلگرام
+              </Button>
+              <Button variant="outline" className="text-white border-white hover:bg-white hover:text-blue-600">
+                <Video className="w-4 h-4 ml-2" />
+                اینستاگرام
+              </Button>
+              <Button variant="outline" className="text-white border-white hover:bg-white hover:text-blue-600">
+                <Globe className="w-4 h-4 ml-2" />
+                لینکدین
+              </Button>
             </div>
           </motion.div>
         </div>
@@ -906,8 +754,8 @@ export default function DiacoHomePage() {
                   <span className="text-white font-bold">د</span>
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold">دیاکو</h3>
-                  <p className="text-sm text-gray-400">سامانه هوشمند مهاجرت</p>
+                  <h3 className="text-lg font-bold">هلدینگ مهاجرتی دیاکو</h3>
+                  <p className="text-sm text-gray-400">اندیشه راه زندگی</p>
                 </div>
               </div>
               <p className="text-gray-400 text-sm">مشاوره تخصصی مهاجرت به کشورهای مختلف با بیش از 10 سال تجربه</p>
@@ -933,7 +781,7 @@ export default function DiacoHomePage() {
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    مشاوره رایگان
+                    آوسبیلدونگ آلمان
                   </Link>
                 </li>
               </ul>
@@ -944,12 +792,12 @@ export default function DiacoHomePage() {
               <ul className="space-y-2 text-sm text-gray-400">
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    کانادا
+                    آلمان
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    آلمان
+                    کانادا
                   </Link>
                 </li>
                 <li>
@@ -959,7 +807,7 @@ export default function DiacoHomePage() {
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    انگلستان
+                    ترکیه
                   </Link>
                 </li>
               </ul>
@@ -978,7 +826,7 @@ export default function DiacoHomePage() {
                 </li>
                 <li className="flex items-center space-x-2 space-x-reverse">
                   <MapPin className="w-4 h-4" />
-                  <span>تهران، ایران</span>
+                  <span>تهران، شهرک غرب</span>
                 </li>
               </ul>
             </div>
