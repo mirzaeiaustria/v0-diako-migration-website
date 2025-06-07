@@ -2,7 +2,7 @@
 
 import { EnhancedHeroSection } from "@/components/enhanced-hero-section"
 import { MigrationMethodsSection } from "@/components/migration-methods-section"
-import { MigrationMethodWizard } from "@/components/migration-method-wizard"
+import { AdvancedMigrationWizard } from "@/components/advanced-migration-wizard" // New import
 import { InteractiveWorldMap } from "@/components/interactive-world-map"
 import { MigrationStatistics } from "@/components/migration-statistics"
 import { MigrationSuccessStories } from "@/components/migration-success-stories"
@@ -317,7 +317,7 @@ export default function DiacoHomePage() {
           </ScrollReveal>
 
           <ScrollReveal direction="up" delay={0.2}>
-            <MigrationMethodWizard />
+            <AdvancedMigrationWizard /> {/* Replaced MigrationMethodWizard with AdvancedMigrationWizard */}
           </ScrollReveal>
         </div>
       </section>

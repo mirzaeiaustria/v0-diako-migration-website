@@ -18,7 +18,7 @@ import {
   TrendingUp,
   Clock,
   Award,
-  Calculator,
+  Phone,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -43,7 +43,7 @@ interface MigrationRecommendation {
   country: string
   score: number
   timeline: string
-  cost: string
+  costDetails: string // Changed to string for detailed text
   successRate: number
   requirements: string[]
   advantages: string[]
@@ -96,24 +96,27 @@ export function AdvancedMigrationWizard() {
     age: "",
     maritalStatus: "",
     children: "",
-    spouseEducation: "",
+    spouseEducation: "", // New field
 
     // Education
     education: "",
-    field: "",
+    educationField: "", // New field
+    gpa: "", // New field
     hasCredentialAssessment: false,
 
     // Experience
     workExperience: "",
     currentJob: "",
+    managementExperience: "", // New field
     languageSkills: {
       english: "",
       french: "",
-      german: "",
+      german: "", // Added German
     },
 
     // Financial
     budget: "",
+    annualIncome: "", // New field
     hasJobOffer: false,
     investmentCapacity: "",
 
@@ -121,7 +124,11 @@ export function AdvancedMigrationWizard() {
     preferredCountries: [],
     migrationGoal: "",
     timeline: "",
-    familyReunification: false,
+    familyReunification: false, // New field
+    travelHistory: "", // New field
+    medicalConditions: "", // New field
+    specialSkills: "", // New field
+    pnpInterest: false, // New field
   })
 
   const [recommendations, setRecommendations] = useState<MigrationRecommendation[]>([])
@@ -153,49 +160,40 @@ export function AdvancedMigrationWizard() {
     await new Promise((resolve) => setTimeout(resolve, 3000))
 
     // Mock recommendations based on form data
-    const mockRecommendations: MigrationRecommendation[] = [
-      {
-        method: "مهاجرت کاری",
-        country: "کانادا",
-        score: 75, // Example score based on user's request
-        timeline: "12-18 ماه",
-        cost: "$8,000 - $15,000",
-        successRate: 78,
-        requirements: ["مدرک زبان IELTS 7+", "ارزیابی مدارک", "تجربه کاری 3+ سال"],
-        advantages: ["مسیر سریع به اقامت دائم", "امکان همراهی خانواده", "بازار کار قوی"],
-        challenges: ["رقابت بالا", "نیاز به نمره زبان بالا", "فرآیند طولانی"],
-      },
-      {
-        method: "آوسبیلدونگ",
-        country: "آلمان",
-        score: 92,
-        timeline: "6-9 ماه",
-        cost: "$3,000 - $6,000",
-        successRate: 95,
-        requirements: ["زبان آلمانی A2", "سن زیر 35 سال", "مدرک دیپلم"],
-        advantages: ["جاب آفر تضمینی", "حقوق حین آموزش", "مسیر آسان به اقامت"],
-        challenges: ["یادگیری زبان آلمانی", "کار فیزیکی", "فرهنگ متفاوت"],
-      },
-      {
-        method: "مهاجرت سرمایه‌گذاری",
-        country: "پرتغال",
-        score: 70,
-        timeline: "6-12 ماه",
-        cost: "$350,000+",
-        successRate: 90,
-        requirements: ["سرمایه‌گذاری €350,000", "عدم سوء پیشینه", "بیمه درمانی"],
-        advantages: ["پردازش سریع", "دسترسی به اتحادیه اروپا", "کیفیت زندگی بالا"],
-        challenges: ["سرمایه بالا", "مالیات", "زبان پرتغالی"],
-      },
-    ]
+    // This logic would be replaced by actual AI/rule-based system
+    const primaryRecommendation: MigrationRecommendation = {
+      method: "مهاجرت کاری",
+      country: "کانادا",
+      score: 75, // Example score based on user's request
+      timeline: "12-18 ماه",
+      costDetails: `
+        هزینه‌های مهاجرت کاری به کانادا به شرح زیر تخمین زده می‌شود:
+        - هزینه‌های دولتی (بررسی پرونده، ویزا): 1,500 - 2,500 دلار کانادا
+        - هزینه‌های وکیل/مشاور مهاجرت: 3,000 - 7,000 دلار کانادا
+        - هزینه‌های ترجمه مدارک: 500 - 1,000 دلار کانادا
+        - آزمون‌های زبان (آیلتس/CELPIP): 200 - 300 دلار کانادا
+        - معاینات پزشکی: 200 - 400 دلار کانادا
+        - تمکن مالی اولیه (برای یک نفر): 13,757 دلار کانادا (ممکن است بر اساس تعداد اعضای خانواده افزایش یابد)
+        - هزینه‌های اولیه زندگی (اجاره، حمل و نقل، غذا برای 1-3 ماه): 3,000 - 6,000 دلار کانادا
+        
+        **مجموع تخمینی: 21,657 - 30,957 دلار کانادا**
+        
+        این هزینه‌ها تقریبی بوده و بسته به شرایط فردی، نرخ ارز و تغییرات قوانین ممکن است متفاوت باشد.
+      `,
+      successRate: 78,
+      requirements: ["مدرک زبان IELTS 7+", "ارزیابی مدارک", "تجربه کاری 3+ سال"],
+      advantages: ["مسیر سریع به اقامت دائم", "امکان همراهی خانواده", "بازار کار قوی"],
+      challenges: ["رقابت بالا", "نیاز به نمره زبان بالا", "فرآیند طولانی"],
+    }
 
-    setRecommendations(mockRecommendations)
+    setRecommendations([primaryRecommendation]) // Only set the primary recommendation
     setIsAnalyzing(false)
     nextStep()
   }
 
   const renderStepContent = () => {
-    switch (wizardSteps[currentStep].id) {
+    const currentQuestion = wizardSteps[currentStep].id
+    switch (currentQuestion) {
       case "personal":
         return (
           <div className="space-y-6">
@@ -254,6 +252,28 @@ export function AdvancedMigrationWizard() {
                 </SelectContent>
               </Select>
             </div>
+
+            {formData.maritalStatus === "married" && (
+              <div>
+                <Label className="text-base font-medium">بالاترین مدرک تحصیلی همسر</Label>
+                <Select
+                  value={formData.spouseEducation}
+                  onValueChange={(value) => updateFormData("spouseEducation", value)}
+                >
+                  <SelectTrigger className="mt-2">
+                    <SelectValue placeholder="مدرک تحصیلی همسر" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">ندارد</SelectItem>
+                    <SelectItem value="diploma">دیپلم</SelectItem>
+                    <SelectItem value="associate">کاردانی</SelectItem>
+                    <SelectItem value="bachelor">کارشناسی</SelectItem>
+                    <SelectItem value="master">کارشناسی ارشد</SelectItem>
+                    <SelectItem value="phd">دکتری</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
           </div>
         )
 
@@ -291,23 +311,31 @@ export function AdvancedMigrationWizard() {
             </div>
 
             <div>
-              <Label htmlFor="field" className="text-base font-medium">
+              <Label htmlFor="educationField" className="text-base font-medium">
                 رشته تحصیلی
               </Label>
-              <Select value={formData.field} onValueChange={(value) => updateFormData("field", value)}>
-                <SelectTrigger className="mt-2">
-                  <SelectValue placeholder="رشته تحصیلی خود را انتخاب کنید" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="engineering">مهندسی</SelectItem>
-                  <SelectItem value="medicine">پزشکی</SelectItem>
-                  <SelectItem value="it">فناوری اطلاعات</SelectItem>
-                  <SelectItem value="business">مدیریت و کسب‌وکار</SelectItem>
-                  <SelectItem value="arts">هنر و ادبیات</SelectItem>
-                  <SelectItem value="science">علوم پایه</SelectItem>
-                  <SelectItem value="other">سایر</SelectItem>
-                </SelectContent>
-              </Select>
+              <Input
+                id="educationField"
+                value={formData.educationField}
+                onChange={(e) => updateFormData("educationField", e.target.value)}
+                placeholder="رشته تحصیلی خود را وارد کنید (مثلاً مهندسی نرم‌افزار)"
+                className="mt-2"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="gpa" className="text-base font-medium">
+                معدل (از 4 یا 20)
+              </Label>
+              <Input
+                id="gpa"
+                value={formData.gpa}
+                onChange={(e) => updateFormData("gpa", e.target.value)}
+                placeholder="مثلاً 3.5 یا 17.5"
+                className="mt-2"
+                type="number"
+                step="0.1"
+              />
             </div>
 
             <div className="flex items-center space-x-2 space-x-reverse">
@@ -316,7 +344,7 @@ export function AdvancedMigrationWizard() {
                 checked={formData.hasCredentialAssessment}
                 onCheckedChange={(checked) => updateFormData("hasCredentialAssessment", checked)}
               />
-              <Label htmlFor="credential">ارزیابی مدارک تحصیلی دارم</Label>
+              <Label htmlFor="credential">ارزیابی مدارک تحصیلی (WES/ECA) دارم</Label>
             </div>
           </div>
         )
@@ -325,7 +353,7 @@ export function AdvancedMigrationWizard() {
         return (
           <div className="space-y-6">
             <div>
-              <Label className="text-base font-medium">سابقه کار</Label>
+              <Label className="text-base font-medium">سابقه کار تمام وقت (سال)</Label>
               <Select
                 value={formData.workExperience}
                 onValueChange={(value) => updateFormData("workExperience", value)}
@@ -345,15 +373,33 @@ export function AdvancedMigrationWizard() {
 
             <div>
               <Label htmlFor="currentJob" className="text-base font-medium">
-                شغل فعلی
+                عنوان شغل فعلی
               </Label>
               <Input
                 id="currentJob"
                 value={formData.currentJob}
                 onChange={(e) => updateFormData("currentJob", e.target.value)}
-                placeholder="عنوان شغل فعلی خود را وارد کنید"
+                placeholder="مثلاً مهندس نرم‌افزار، پزشک، مدیر پروژه"
                 className="mt-2"
               />
+            </div>
+
+            <div>
+              <Label className="text-base font-medium">سابقه مدیریت (سال)</Label>
+              <Select
+                value={formData.managementExperience}
+                onValueChange={(value) => updateFormData("managementExperience", value)}
+              >
+                <SelectTrigger className="mt-2">
+                  <SelectValue placeholder="سابقه مدیریت" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="0">ندارم</SelectItem>
+                  <SelectItem value="1-3">1-3 سال</SelectItem>
+                  <SelectItem value="3-5">3-5 سال</SelectItem>
+                  <SelectItem value="5+">بیش از 5 سال</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-4">
@@ -361,7 +407,7 @@ export function AdvancedMigrationWizard() {
 
               <div>
                 <Label htmlFor="english" className="text-sm">
-                  زبان انگلیسی
+                  زبان انگلیسی (آیلتس/تافل)
                 </Label>
                 <Select
                   value={formData.languageSkills.english}
@@ -373,17 +419,17 @@ export function AdvancedMigrationWizard() {
                     <SelectValue placeholder="سطح انگلیسی" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="beginner">مبتدی</SelectItem>
-                    <SelectItem value="intermediate">متوسط</SelectItem>
-                    <SelectItem value="advanced">پیشرفته</SelectItem>
-                    <SelectItem value="native">زبان مادری</SelectItem>
+                    <SelectItem value="none">ندارم</SelectItem>
+                    <SelectItem value="beginner">مبتدی (A1-A2)</SelectItem>
+                    <SelectItem value="intermediate">متوسط (B1-B2)</SelectItem>
+                    <SelectItem value="advanced">پیشرفته (C1-C2)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div>
                 <Label htmlFor="french" className="text-sm">
-                  زبان فرانسه
+                  زبان فرانسه (TEF/TCF)
                 </Label>
                 <Select
                   value={formData.languageSkills.french}
@@ -396,9 +442,31 @@ export function AdvancedMigrationWizard() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">ندارم</SelectItem>
-                    <SelectItem value="beginner">مبتدی</SelectItem>
-                    <SelectItem value="intermediate">متوسط</SelectItem>
-                    <SelectItem value="advanced">پیشرفته</SelectItem>
+                    <SelectItem value="beginner">مبتدی (A1-A2)</SelectItem>
+                    <SelectItem value="intermediate">متوسط (B1-B2)</SelectItem>
+                    <SelectItem value="advanced">پیشرفته (C1-C2)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="german" className="text-sm">
+                  زبان آلمانی (Goethe/TestDaF)
+                </Label>
+                <Select
+                  value={formData.languageSkills.german}
+                  onValueChange={(value) =>
+                    updateFormData("languageSkills", { ...formData.languageSkills, german: value })
+                  }
+                >
+                  <SelectTrigger className="mt-1">
+                    <SelectValue placeholder="سطح آلمانی" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">ندارم</SelectItem>
+                    <SelectItem value="beginner">مبتدی (A1-A2)</SelectItem>
+                    <SelectItem value="intermediate">متوسط (B1-B2)</SelectItem>
+                    <SelectItem value="advanced">پیشرفته (C1-C2)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -410,20 +478,34 @@ export function AdvancedMigrationWizard() {
         return (
           <div className="space-y-6">
             <div>
-              <Label className="text-base font-medium">بودجه مهاجرت</Label>
+              <Label className="text-base font-medium">بودجه کلی مهاجرت (به دلار آمریکا)</Label>
               <Select value={formData.budget} onValueChange={(value) => updateFormData("budget", value)}>
                 <SelectTrigger className="mt-2">
                   <SelectValue placeholder="بودجه خود را انتخاب کنید" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="under-10k">کمتر از 10,000 دلار</SelectItem>
-                  <SelectItem value="10k-25k">10,000 - 25,000 دلار</SelectItem>
-                  <SelectItem value="25k-50k">25,000 - 50,000 دلار</SelectItem>
-                  <SelectItem value="50k-100k">50,000 - 100,000 دلار</SelectItem>
-                  <SelectItem value="100k-250k">100,000 - 250,000 دلار</SelectItem>
-                  <SelectItem value="250k+">بیش از 250,000 دلار</SelectItem>
+                  <SelectItem value="under-10k">کمتر از 10,000</SelectItem>
+                  <SelectItem value="10k-25k">10,000 - 25,000</SelectItem>
+                  <SelectItem value="25k-50k">25,000 - 50,000</SelectItem>
+                  <SelectItem value="50k-100k">50,000 - 100,000</SelectItem>
+                  <SelectItem value="100k-250k">100,000 - 250,000</SelectItem>
+                  <SelectItem value="250k+">بیش از 250,000</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="annualIncome" className="text-base font-medium">
+                درآمد سالیانه فعلی (به دلار آمریکا)
+              </Label>
+              <Input
+                id="annualIncome"
+                value={formData.annualIncome}
+                onChange={(e) => updateFormData("annualIncome", e.target.value)}
+                placeholder="مثلاً 30,000"
+                className="mt-2"
+                type="number"
+              />
             </div>
 
             <div className="flex items-center space-x-2 space-x-reverse">
@@ -432,11 +514,11 @@ export function AdvancedMigrationWizard() {
                 checked={formData.hasJobOffer}
                 onCheckedChange={(checked) => updateFormData("hasJobOffer", checked)}
               />
-              <Label htmlFor="jobOffer">جاب آفر از کشور مقصد دارم</Label>
+              <Label htmlFor="jobOffer">جاب آفر معتبر از کشور مقصد دارم</Label>
             </div>
 
             <div>
-              <Label className="text-base font-medium">ظرفیت سرمایه‌گذاری</Label>
+              <Label className="text-base font-medium">ظرفیت سرمایه‌گذاری (به دلار آمریکا)</Label>
               <Select
                 value={formData.investmentCapacity}
                 onValueChange={(value) => updateFormData("investmentCapacity", value)}
@@ -446,9 +528,10 @@ export function AdvancedMigrationWizard() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">قابلیت سرمایه‌گذاری ندارم</SelectItem>
-                  <SelectItem value="100k-250k">100,000 - 250,000 دلار</SelectItem>
-                  <SelectItem value="250k-500k">250,000 - 500,000 دلار</SelectItem>
-                  <SelectItem value="500k+">بیش از 500,000 دلار</SelectItem>
+                  <SelectItem value="100k-250k">100,000 - 250,000</SelectItem>
+                  <SelectItem value="250k-500k">250,000 - 500,000</SelectItem>
+                  <SelectItem value="500k-1M">500,000 - 1,000,000</SelectItem>
+                  <SelectItem value="1M+">بیش از 1,000,000</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -461,7 +544,22 @@ export function AdvancedMigrationWizard() {
             <div>
               <Label className="text-base font-medium">کشورهای مورد علاقه (چند انتخاب امکان‌پذیر)</Label>
               <div className="grid grid-cols-2 gap-3 mt-2">
-                {["کانادا", "آلمان", "استرالیا", "آمریکا", "انگلستان", "فرانسه", "پرتغال", "اسپانیا"].map((country) => (
+                {[
+                  "کانادا",
+                  "آلمان",
+                  "استرالیا",
+                  "آمریکا",
+                  "انگلستان",
+                  "فرانسه",
+                  "پرتغال",
+                  "اسپانیا",
+                  "ایتالیا",
+                  "هلند",
+                  "ترکیه",
+                  "یونان",
+                  "قبرس",
+                  "اتریش",
+                ].map((country) => (
                   <div key={country} className="flex items-center space-x-2 space-x-reverse">
                     <Checkbox
                       id={country}
@@ -503,12 +601,20 @@ export function AdvancedMigrationWizard() {
                   <Label htmlFor="investment">سرمایه‌گذاری</Label>
                 </div>
                 <div className="flex items-center space-x-2 space-x-reverse">
+                  <RadioGroupItem value="startup" id="startup" />
+                  <Label htmlFor="startup">راه‌اندازی کسب‌وکار/استارتاپ</Label>
+                </div>
+                <div className="flex items-center space-x-2 space-x-reverse">
                   <RadioGroupItem value="family" id="family" />
                   <Label htmlFor="family">پیوستن به خانواده</Label>
                 </div>
                 <div className="flex items-center space-x-2 space-x-reverse">
                   <RadioGroupItem value="lifestyle" id="lifestyle" />
-                  <Label htmlFor="lifestyle">بهبود کیفیت زندگی</Label>
+                  <Label htmlFor="lifestyle">بهبود کیفیت زندگی/بازنشستگی</Label>
+                </div>
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <RadioGroupItem value="asylum" id="asylum" />
+                  <Label htmlFor="asylum">پناهندگی</Label>
                 </div>
               </RadioGroup>
             </div>
@@ -520,18 +626,76 @@ export function AdvancedMigrationWizard() {
                   <SelectValue placeholder="زمان‌بندی مهاجرت" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="asap">هرچه سریع‌تر</SelectItem>
-                  <SelectItem value="6months">6 ماه آینده</SelectItem>
-                  <SelectItem value="1year">1 سال آینده</SelectItem>
-                  <SelectItem value="2years">2 سال آینده</SelectItem>
+                  <SelectItem value="asap">هرچه سریع‌تر (کمتر از 6 ماه)</SelectItem>
+                  <SelectItem value="6months-1year">6 ماه تا 1 سال آینده</SelectItem>
+                  <SelectItem value="1year-2years">1 تا 2 سال آینده</SelectItem>
+                  <SelectItem value="2years+">بیش از 2 سال آینده</SelectItem>
                   <SelectItem value="flexible">انعطاف‌پذیر</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+
+            <div className="flex items-center space-x-2 space-x-reverse">
+              <Checkbox
+                id="familyReunification"
+                checked={formData.familyReunification}
+                onCheckedChange={(checked) => updateFormData("familyReunification", checked)}
+              />
+              <Label htmlFor="familyReunification">قصد مهاجرت با خانواده را دارم</Label>
+            </div>
+
+            <div className="flex items-center space-x-2 space-x-reverse">
+              <Checkbox
+                id="pnpInterest"
+                checked={formData.pnpInterest}
+                onCheckedChange={(checked) => updateFormData("pnpInterest", checked)}
+              />
+              <Label htmlFor="pnpInterest">تمایل به شرکت در برنامه‌های نامزدی استانی (PNP) دارم</Label>
+            </div>
+
+            <div>
+              <Label htmlFor="travelHistory" className="text-base font-medium">
+                سابقه سفر به کشورهای دیگر (اختیاری)
+              </Label>
+              <Input
+                id="travelHistory"
+                value={formData.travelHistory}
+                onChange={(e) => updateFormData("travelHistory", e.target.value)}
+                placeholder="کشورهایی که سفر کرده‌اید یا ویزای رد شده دارید"
+                className="mt-2"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="medicalConditions" className="text-base font-medium">
+                شرایط خاص پزشکی (اختیاری)
+              </Label>
+              <Input
+                id="medicalConditions"
+                value={formData.medicalConditions}
+                onChange={(e) => updateFormData("medicalConditions", e.target.value)}
+                placeholder="اگر شرایط پزشکی خاصی دارید"
+                className="mt-2"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="specialSkills" className="text-base font-medium">
+                مهارت‌های خاص یا دستاوردهای ویژه (اختیاری)
+              </Label>
+              <Input
+                id="specialSkills"
+                value={formData.specialSkills}
+                onChange={(e) => updateFormData("specialSkills", e.target.value)}
+                placeholder="مثلاً ورزشکار، هنرمند، اختراع ثبت شده"
+                className="mt-2"
+              />
             </div>
           </div>
         )
 
       case "results":
+        const primaryRec = recommendations[0]
         return (
           <div className="space-y-6">
             {isAnalyzing ? (
@@ -550,62 +714,77 @@ export function AdvancedMigrationWizard() {
                   <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">تحلیل کامل شد!</h3>
                   <p className="text-gray-600">
-                    بر اساس تحصیلات و سابقه کار شما، احتمال موفقیت در روش مهاجرت کاری به کانادا{" "}
-                    <span className="font-bold text-blue-600">
-                      {recommendations[0]?.score || 0}
-                      {" %"}
-                    </span>{" "}
-                    تخمین زده می‌شود.
+                    مشاورین هلدینگ مهاجرتی دیاکو بر اساس اطلاعات شما، بهترین مسیر مهاجرت را پیشنهاد داده و احتمال موفقیت
+                    شما را محاسبه می‌کنند.
                   </p>
                 </div>
 
-                <div className="space-y-6">
-                  {recommendations.map((rec, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.2 }}
-                    >
-                      <Card className="border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-teal-50">
-                        <CardHeader>
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <CardTitle className="text-xl text-gray-900">
-                                {rec.method} - {rec.country}
-                              </CardTitle>
-                              <div className="flex items-center gap-4 mt-2">
-                                <Badge className="bg-green-100 text-green-800">امتیاز: {rec.score}/100</Badge>
-                                <div className="flex items-center gap-1 text-sm text-gray-600">
-                                  <Clock className="w-4 h-4" />
-                                  {rec.timeline}
-                                </div>
-                                <div className="flex items-center gap-1 text-sm text-gray-600">
-                                  <DollarSign className="w-4 h-4" />
-                                  {rec.cost}
-                                </div>
-                                <div className="flex items-center gap-1 text-sm text-gray-600">
-                                  <TrendingUp className="w-4 h-4" />
-                                  {rec.successRate}% موفقیت
-                                </div>
+                {primaryRec && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    <Card className="border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-teal-50">
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <CardTitle className="text-xl text-gray-900">
+                              {primaryRec.method} - {primaryRec.country}
+                            </CardTitle>
+                            <div className="flex items-center gap-4 mt-2">
+                              <Badge className="bg-green-100 text-green-800">تناسب: {primaryRec.score}/100</Badge>
+                              <div className="flex items-center gap-1 text-sm text-gray-600">
+                                <Clock className="w-4 h-4" />
+                                {primaryRec.timeline}
+                              </div>
+                              <div className="flex items-center gap-1 text-sm text-gray-600">
+                                <TrendingUp className="w-4 h-4" />
+                                {primaryRec.successRate}% موفقیت
                               </div>
                             </div>
-                            <div className="text-right">
-                              <div className="text-3xl font-bold text-blue-600">{rec.score}</div>
-                              <div className="text-sm text-gray-500">امتیاز</div>
-                            </div>
                           </div>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="grid md:grid-cols-3 gap-6">
+                          <div className="text-right">
+                            <div className="text-3xl font-bold text-blue-600">{primaryRec.score}</div>
+                            <div className="text-sm text-gray-500">امتیاز</div>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-6">
+                          <div>
+                            <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                              <CheckCircle className="w-4 h-4 text-green-600" />
+                              تخمین درصد موفقیت:
+                            </h4>
+                            <p className="text-gray-600">
+                              بر اساس اطلاعات شما، احتمال موفقیت در روش{" "}
+                              <span className="font-bold text-blue-600">{primaryRec.method}</span> به کشور{" "}
+                              <span className="font-bold text-blue-600">{primaryRec.country}</span>{" "}
+                              <span className="font-bold text-blue-600">{primaryRec.score}%</span> تخمین زده می‌شود.
+                            </p>
+                          </div>
+
+                          <div>
+                            <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                              <DollarSign className="w-4 h-4 text-purple-600" />
+                              محاسبه هزینه‌های مهاجرتی:
+                            </h4>
+                            <div className="text-sm text-gray-600 whitespace-pre-line">{primaryRec.costDetails}</div>
+                            <p className="text-xs text-gray-500 mt-2">
+                              *نمایش هزینه‌ها در قالب چارت در به‌روزرسانی‌های آینده اضافه خواهد شد.
+                            </p>
+                          </div>
+
+                          <div className="grid md:grid-cols-2 gap-6">
                             <div>
                               <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
                                 <CheckCircle className="w-4 h-4 text-green-600" />
                                 شرایط لازم
                               </h4>
-                              <ul className="text-sm text-gray-600 space-y-1">
-                                {rec.requirements.map((req, i) => (
-                                  <li key={i}>• {req}</li>
+                              <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                {primaryRec.requirements.map((req, i) => (
+                                  <li key={i}>{req}</li>
                                 ))}
                               </ul>
                             </div>
@@ -614,47 +793,53 @@ export function AdvancedMigrationWizard() {
                                 <Award className="w-4 h-4 text-blue-600" />
                                 مزایا
                               </h4>
-                              <ul className="text-sm text-gray-600 space-y-1">
-                                {rec.advantages.map((adv, i) => (
-                                  <li key={i}>• {adv}</li>
+                              <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                {primaryRec.advantages.map((adv, i) => (
+                                  <li key={i}>{adv}</li>
                                 ))}
                               </ul>
                             </div>
-                            <div>
+                            <div className="md:col-span-2">
                               <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
                                 <AlertCircle className="w-4 h-4 text-orange-600" />
                                 چالش‌ها
                               </h4>
-                              <ul className="text-sm text-gray-600 space-y-1">
-                                {rec.challenges.map((challenge, i) => (
-                                  <li key={i}>• {challenge}</li>
+                              <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                                {primaryRec.challenges.map((challenge, i) => (
+                                  <li key={i}>{challenge}</li>
                                 ))}
                               </ul>
                             </div>
                           </div>
-                          <div className="mt-6 flex gap-3">
-                            <Button className="flex-1">
-                              <Calculator className="w-4 h-4 ml-2" />
-                              محاسبه دقیق هزینه
-                            </Button>
-                            <Button variant="outline" className="flex-1">
-                              اطلاعات بیشتر
-                            </Button>
-                            <Button asChild variant="outline">
-                              <a
-                                href="https://calendly.com/diaco-holding/15min"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                مشاوره رایگان
-                              </a>
-                            </Button>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-                  ))}
-                </div>
+                        </div>
+                        <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                          <Button asChild className="flex-1">
+                            <a
+                              href="https://calendly.com/diaco-holding/15min"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <Phone className="w-4 h-4 ml-2" />
+                              مشاوره رایگان
+                            </a>
+                          </Button>
+                          <Button asChild variant="outline" className="flex-1">
+                            <a
+                              href="https://calendly.com/diaco-holding/15min"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              رزرو وقت مشاوره
+                            </a>
+                          </Button>
+                          <Button variant="outline" className="flex-1">
+                            دانلود گزارش کامل
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                )}
 
                 <div className="mt-8 p-6 bg-blue-50 rounded-lg">
                   <h4 className="font-semibold text-gray-900 mb-2">مرحله بعدی چیست؟</h4>
@@ -683,13 +868,13 @@ export function AdvancedMigrationWizard() {
   const isStepComplete = () => {
     switch (wizardSteps[currentStep].id) {
       case "personal":
-        return formData.age && formData.maritalStatus
+        return formData.age && formData.maritalStatus && formData.children
       case "education":
-        return formData.education && formData.field
+        return formData.education && formData.educationField && formData.gpa
       case "experience":
-        return formData.workExperience && formData.languageSkills.english
+        return formData.workExperience && formData.currentJob && formData.languageSkills.english
       case "financial":
-        return formData.budget
+        return formData.budget && formData.annualIncome && formData.investmentCapacity
       case "preferences":
         return formData.preferredCountries.length > 0 && formData.migrationGoal && formData.timeline
       default:
