@@ -157,7 +157,7 @@ export function AdvancedMigrationWizard() {
       {
         method: "مهاجرت کاری",
         country: "کانادا",
-        score: 85,
+        score: 75, // Example score based on user's request
         timeline: "12-18 ماه",
         cost: "$8,000 - $15,000",
         successRate: 78,
@@ -549,7 +549,14 @@ export function AdvancedMigrationWizard() {
                 <div className="text-center mb-8">
                   <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">تحلیل کامل شد!</h3>
-                  <p className="text-gray-600">بر اساس اطلاعات شما، بهترین گزینه‌های مهاجرت را پیدا کردیم</p>
+                  <p className="text-gray-600">
+                    بر اساس تحصیلات و سابقه کار شما، احتمال موفقیت در روش مهاجرت کاری به کانادا{" "}
+                    <span className="font-bold text-blue-600">
+                      {recommendations[0]?.score || 0}
+                      {" %"}
+                    </span>{" "}
+                    تخمین زده می‌شود.
+                  </p>
                 </div>
 
                 <div className="space-y-6">
@@ -633,7 +640,15 @@ export function AdvancedMigrationWizard() {
                             <Button variant="outline" className="flex-1">
                               اطلاعات بیشتر
                             </Button>
-                            <Button variant="outline">مشاوره رایگان</Button>
+                            <Button asChild variant="outline">
+                              <a
+                                href="https://calendly.com/diaco-holding/15min"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                مشاوره رایگان
+                              </a>
+                            </Button>
                           </div>
                         </CardContent>
                       </Card>
@@ -647,7 +662,11 @@ export function AdvancedMigrationWizard() {
                     برای شروع فرآیند مهاجرت، پیشنهاد می‌کنیم با کارشناسان ما مشاوره رایگان داشته باشید.
                   </p>
                   <div className="flex gap-3">
-                    <Button>رزرو مشاوره رایگان</Button>
+                    <Button asChild>
+                      <a href="https://calendly.com/diaco-holding/15min" target="_blank" rel="noopener noreferrer">
+                        رزرو مشاوره رایگان
+                      </a>
+                    </Button>
                     <Button variant="outline">دانلود گزارش کامل</Button>
                   </div>
                 </div>

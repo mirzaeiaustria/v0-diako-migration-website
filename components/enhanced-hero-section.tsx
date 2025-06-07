@@ -25,6 +25,8 @@ import { Badge } from "@/components/ui/badge"
 import { FloatingParticles } from "@/components/ui/floating-particles"
 import { AnimatedCounter } from "@/components/ui/animated-counter"
 import { GradientText } from "@/components/ui/gradient-text"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { AdvancedMigrationWizard } from "@/components/advanced-migration-wizard"
 
 const heroFeatures = [
   {
@@ -118,6 +120,7 @@ const quickActions = [
 export function EnhancedHeroSection() {
   const [isVisible, setIsVisible] = useState(false)
   const [currentTestimonial, setCurrentTestimonial] = useState(0)
+  const [isWizardOpen, setIsWizardOpen] = useState(false)
 
   useEffect(() => {
     setIsVisible(true)
@@ -321,13 +324,25 @@ export function EnhancedHeroSection() {
                     </div>
                   </div>
                   <p className="text-blue-100 mb-6 leading-relaxed">
-                    هوش مصنوعی ما بر اساس اطلاعات شما، بهترین مسیر مهاجرت را پیشنهاد می‌دهد و احتمال موفقیت شما را محاسبه
-                    می‌کند.
+                    در کمتر از 5 دقیقه، مشاورین هلدینگ مهاجرتی دیاکو بر اساس اطلاعات شما، بهترین مسیر مهاجرت را پیشنهاد
+                    داده و احتمال موفقیت شما را محاسبه می‌کنند.
                   </p>
-                  <Button className="w-full bg-white text-blue-600 hover:bg-blue-50 font-semibold py-3">
-                    شروع ارزیابی رایگان
-                    <ArrowRight className="w-5 h-5 mr-2" />
-                  </Button>
+                  <Dialog open={isWizardOpen} onOpenChange={setIsWizardOpen}>
+                    <DialogTrigger asChild>
+                      <Button className="w-full bg-white text-blue-600 hover:bg-blue-50 font-semibold py-3">
+                        شروع ارزیابی رایگان
+                        <ArrowRight className="w-5 h-5 mr-2" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-4xl p-0 overflow-hidden">
+                      <DialogHeader className="p-6 pb-0">
+                        <DialogTitle className="text-2xl font-bold text-gray-900">ارزیابی هوشمند مهاجرت</DialogTitle>
+                      </DialogHeader>
+                      <div className="p-6 pt-0">
+                        <AdvancedMigrationWizard />
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </CardContent>
               </Card>
             </motion.div>
