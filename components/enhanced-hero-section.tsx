@@ -244,10 +244,18 @@ export function EnhancedHeroSection() {
                   <Button
                     size="lg"
                     className={`${action.color} ${action.hoverColor} text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300`}
-                    asChild={action.action === "consultation"}
+                    asChild={action.action === "consultation" || action.action === "assessment"}
                   >
                     {action.action === "consultation" ? (
                       <a href="https://calendly.com/diaco-holding/15min" target="_blank" rel="noopener noreferrer">
+                        <action.icon className="w-5 h-5 ml-2" />
+                        <div className="text-right">
+                          <div className="font-semibold">{action.title}</div>
+                          <div className="text-xs opacity-90">{action.description}</div>
+                        </div>
+                      </a>
+                    ) : action.action === "assessment" ? (
+                      <a href="https://diaco.formaloo.co/5bbjx" target="_blank" rel="noopener noreferrer">
                         <action.icon className="w-5 h-5 ml-2" />
                         <div className="text-right">
                           <div className="font-semibold">{action.title}</div>
