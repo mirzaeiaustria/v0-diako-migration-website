@@ -122,13 +122,13 @@ export function AdvancedMigrationWizard() {
 
     // Preferences
     preferredCountries: [],
-    migrationGoal: "",
+    migrationGoal: [], // Changed from string to string[]
     timeline: "",
-    familyReunification: false, // New field
-    travelHistory: "", // New field
-    medicalConditions: "", // New field
-    specialSkills: "", // New field
-    pnpInterest: false, // New field
+    familyReunification: false,
+    travelHistory: "",
+    medicalConditions: "",
+    specialSkills: "",
+    pnpInterest: false,
   })
 
   const [recommendations, setRecommendations] = useState<MigrationRecommendation[]>([])
@@ -582,41 +582,36 @@ export function AdvancedMigrationWizard() {
             </div>
 
             <div>
-              <Label className="text-base font-medium">هدف اصلی مهاجرت</Label>
-              <RadioGroup
-                value={formData.migrationGoal}
-                onValueChange={(value) => updateFormData("migrationGoal", value)}
-                className="mt-2"
-              >
-                <div className="flex items-center space-x-2 space-x-reverse">
-                  <RadioGroupItem value="work" id="work" />
-                  <Label htmlFor="work">کار و اشتغال</Label>
-                </div>
-                <div className="flex items-center space-x-2 space-x-reverse">
-                  <RadioGroupItem value="study" id="study" />
-                  <Label htmlFor="study">تحصیل</Label>
-                </div>
-                <div className="flex items-center space-x-2 space-x-reverse">
-                  <RadioGroupItem value="investment" id="investment" />
-                  <Label htmlFor="investment">سرمایه‌گذاری</Label>
-                </div>
-                <div className="flex items-center space-x-2 space-x-reverse">
-                  <RadioGroupItem value="startup" id="startup" />
-                  <Label htmlFor="startup">راه‌اندازی کسب‌وکار/استارتاپ</Label>
-                </div>
-                <div className="flex items-center space-x-2 space-x-reverse">
-                  <RadioGroupItem value="family" id="family" />
-                  <Label htmlFor="family">پیوستن به خانواده</Label>
-                </div>
-                <div className="flex items-center space-x-2 space-x-reverse">
-                  <RadioGroupItem value="lifestyle" id="lifestyle" />
-                  <Label htmlFor="lifestyle">بهبود کیفیت زندگی/بازنشستگی</Label>
-                </div>
-                <div className="flex items-center space-x-2 space-x-reverse">
-                  <RadioGroupItem value="asylum" id="asylum" />
-                  <Label htmlFor="asylum">پناهندگی</Label>
-                </div>
-              </RadioGroup>
+              <Label className="text-base font-medium">هدف اصلی مهاجرت (چند انتخاب امکان‌پذیر)</Label>
+              <div className="grid grid-cols-2 gap-3 mt-2">
+                {[
+                  { value: "work", label: "کار و اشتغال" },
+                  { value: "study", label: "تحصیل" },
+                  { value: "investment", label: "سرمایه‌گذاری" },
+                  { value: "startup", label: "راه‌اندازی کسب‌وکار/استارتاپ" },
+                  { value: "family", label: "پیوستن به خانواده" },
+                  { value: "lifestyle", label: "بهبود کیفیت زندگی/بازنشستگی" },
+                  { value: "asylum", label: "پناهندگی" },
+                ].map((goal) => (
+                  <div key={goal.value} className="flex items-center space-x-2 space-x-reverse">
+                    <Checkbox
+                      id={goal.value}
+                      checked={formData.migrationGoal.includes(goal.value)}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          updateFormData("migrationGoal", [...formData.migrationGoal, goal.value])
+                        } else {
+                          updateFormData(
+                            "migrationGoal",
+                            formData.migrationGoal.filter((g) => g !== goal.value),
+                          )
+                        }
+                      }}
+                    />
+                    <Label htmlFor={goal.value}>{goal.label}</Label>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div>
@@ -876,7 +871,7 @@ export function AdvancedMigrationWizard() {
       case "financial":
         return formData.budget && formData.annualIncome && formData.investmentCapacity
       case "preferences":
-        return formData.preferredCountries.length > 0 && formData.migrationGoal && formData.timeline
+        return formData.preferredCountries.length > 0 && formData.migrationGoal.length > 0 && formData.timeline
       default:
         return true
     }
