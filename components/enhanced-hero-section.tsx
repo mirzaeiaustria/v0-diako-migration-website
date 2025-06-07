@@ -244,12 +244,25 @@ export function EnhancedHeroSection() {
                   <Button
                     size="lg"
                     className={`${action.color} ${action.hoverColor} text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300`}
+                    asChild={action.action === "consultation"}
                   >
-                    <action.icon className="w-5 h-5 ml-2" />
-                    <div className="text-right">
-                      <div className="font-semibold">{action.title}</div>
-                      <div className="text-xs opacity-90">{action.description}</div>
-                    </div>
+                    {action.action === "consultation" ? (
+                      <a href="https://calendly.com/diaco-holding/15min" target="_blank" rel="noopener noreferrer">
+                        <action.icon className="w-5 h-5 ml-2" />
+                        <div className="text-right">
+                          <div className="font-semibold">{action.title}</div>
+                          <div className="text-xs opacity-90">{action.description}</div>
+                        </div>
+                      </a>
+                    ) : (
+                      <>
+                        <action.icon className="w-5 h-5 ml-2" />
+                        <div className="text-right">
+                          <div className="font-semibold">{action.title}</div>
+                          <div className="text-xs opacity-90">{action.description}</div>
+                        </div>
+                      </>
+                    )}
                   </Button>
                 </motion.div>
               ))}
