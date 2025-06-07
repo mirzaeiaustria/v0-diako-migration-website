@@ -3,7 +3,7 @@
 import { EnhancedHeroSection } from "@/components/enhanced-hero-section"
 import { MigrationMethodsSection } from "@/components/migration-methods-section"
 import { AdvancedMigrationWizard } from "@/components/advanced-migration-wizard" // New import
-import { InteractiveWorldMap } from "@/components/interactive-world-map"
+import { InteractiveWorldMap } from "@/components/interactive-world-map" // Updated import
 import { MigrationStatistics } from "@/components/migration-statistics"
 import { MigrationSuccessStories } from "@/components/migration-success-stories"
 import { MigrantExperiences } from "@/components/migrant-experiences"
@@ -333,7 +333,7 @@ export default function DiacoHomePage() {
           </ScrollReveal>
 
           <ScrollReveal direction="up" delay={0.2}>
-            <InteractiveWorldMap />
+            <InteractiveWorldMap /> {/* Updated to the new InteractiveWorldMap */}
           </ScrollReveal>
         </div>
       </ParallaxSection>
