@@ -17,7 +17,7 @@ export function AnimatedCounter({
   from,
   to,
   duration = 2000,
-  suffix = "",
+  suffix = " %", // Changed default to include percentage sign
   prefix = "",
   className = "",
 }: AnimatedCounterProps) {
