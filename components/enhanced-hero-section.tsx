@@ -25,7 +25,16 @@ import { Badge } from "@/components/ui/badge"
 import { FloatingParticles } from "@/components/ui/floating-particles"
 import { AnimatedCounter } from "@/components/ui/animated-counter"
 import { GradientText } from "@/components/ui/gradient-text"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog"
 import { AdvancedMigrationWizard } from "@/components/advanced-migration-wizard"
 
 const heroFeatures = [
@@ -121,6 +130,7 @@ export function EnhancedHeroSection() {
   const [isVisible, setIsVisible] = useState(false)
   const [currentTestimonial, setCurrentTestimonial] = useState(0)
   const [isWizardOpen, setIsWizardOpen] = useState(false)
+  const [isCalculatorOpen, setIsCalculatorOpen] = useState(false) // New state for calculator modal
 
   useEffect(() => {
     setIsVisible(true)
@@ -247,11 +257,15 @@ export function EnhancedHeroSection() {
                   <Button
                     size="lg"
                     className={`${action.color} ${action.hoverColor} text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300`}
-                    asChild={action.action === "consultation" || action.action === "assessment"}
+                    asChild={
+                      action.action === "consultation" ||
+                      action.action === "assessment" ||
+                      action.action === "calculator"
+                    }
                   >
                     {action.action === "consultation" ? (
                       <a href="https://calendly.com/diaco-holding/15min" target="_blank" rel="noopener noreferrer">
-                        <action.icon className="w-5 h-5 ml-2" />
+                        {action.icon && <action.icon className="w-5 h-5 ml-2" />}
                         <div className="text-right">
                           <div className="font-semibold">{action.title}</div>
                           <div className="text-xs opacity-90">{action.description}</div>
@@ -259,15 +273,82 @@ export function EnhancedHeroSection() {
                       </a>
                     ) : action.action === "assessment" ? (
                       <a href="https://diaco.formaloo.co/5bbjx" target="_blank" rel="noopener noreferrer">
-                        <action.icon className="w-5 h-5 ml-2" />
+                        {action.icon && <action.icon className="w-5 h-5 ml-2" />}
                         <div className="text-right">
                           <div className="font-semibold">{action.title}</div>
                           <div className="text-xs opacity-90">{action.description}</div>
                         </div>
                       </a>
+                    ) : action.action === "calculator" ? (
+                      <Dialog open={isCalculatorOpen} onOpenChange={setIsCalculatorOpen}>
+                        <DialogTrigger asChild>
+                          <button className="flex items-center w-full h-full">
+                            {action.icon && <action.icon className="w-5 h-5 ml-2" />}
+                            <div className="text-right">
+                              <div className="font-semibold">{action.title}</div>
+                              <div className="text-xs opacity-90">{action.description}</div>
+                            </div>
+                          </button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-2xl p-6">
+                          <DialogHeader>
+                            <DialogTitle className="text-2xl font-bold text-gray-900 text-right">
+                              محاسبه‌گر هزینه مهاجرت
+                            </DialogTitle>
+                            <DialogDescription className="text-right text-gray-600 mt-2">
+                              ضمن ابراز تأسف بابت عدم عملکرد صحیح بخش "محاسبه‌گر هزینه" در حال حاضر، مشاورین هلدینگ
+                              مهاجرتی دیاکو به اطلاع می‌رسانند که این بخش در دست بهینه‌سازی است تا تجربه‌ای کارآمد و دقیق
+                              را برای شما به ارمغان آورد.
+                              <br />
+                              <br />
+                              هدف ما این است که پس از تکمیل، این ابزار به شما امکان دهد تا با وارد کردن اطلاعات اولیه
+                              مورد نیاز برای ارزیابی مهاجرتی، از جمله روش مهاجرتی و کشور مورد نظر، یک بررسی دقیق و
+                              اختصاصی از پرونده خود دریافت کنید.
+                              <br />
+                              <br />
+                              پس از بررسی هر کیس به صورت جداگانه، اطلاعات زیر در قالب متن ارائه خواهد شد:
+                              <ul className="list-disc list-inside mt-4 space-y-2">
+                                <li>
+                                  <span className="font-semibold">تخمین درصد موفقیت:</span> برآورد تقریبی شانس موفقیت
+                                  شما در روش مهاجرتی انتخابی.
+                                </li>
+                                <li>
+                                  <span className="font-semibold">محاسبه هزینه‌های مهاجرتی:</span> جزئیات کامل هزینه‌های
+                                  مربوط به آن روش مهاجرتی، شامل هزینه‌های دولتی، وکیل، ترجمه و سایر موارد، که در قالب متن
+                                  و چارت به شما نمایش داده خواهد شد.
+                                </li>
+                              </ul>
+                              <br />
+                              در نهایت، اگر پس از مشاهده نتایج نیاز به مشاوره تخصصی‌تر داشتید، می‌توانید از دکمه‌های زیر
+                              استفاده کنید:
+                            </DialogDescription>
+                          </DialogHeader>
+                          <DialogFooter className="flex flex-col sm:flex-row-reverse sm:justify-start gap-4 mt-6">
+                            <Button asChild>
+                              <a
+                                href="https://calendly.com/diaco-holding/15min"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                رزرو وقت مشاوره
+                              </a>
+                            </Button>
+                            <Button variant="outline" asChild>
+                              <a href="tel:YOUR_PHONE_NUMBER">
+                                {" "}
+                                {/* Placeholder for phone number */}
+                                مشاوره رایگان
+                              </a>
+                            </Button>
+                            <DialogClose asChild>
+                              <Button variant="secondary">بستن</Button>
+                            </DialogClose>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
                     ) : (
                       <>
-                        <action.icon className="w-5 h-5 ml-2" />
+                        {action.icon && <action.icon className="w-5 h-5 ml-2" />}
                         <div className="text-right">
                           <div className="font-semibold">{action.title}</div>
                           <div className="text-xs opacity-90">{action.description}</div>
@@ -290,7 +371,7 @@ export function EnhancedHeroSection() {
                 <motion.div key={index} whileHover={{ scale: 1.05 }} className="text-center">
                   <Card className="bg-white/60 backdrop-blur-sm border-white/20 shadow-lg hover:shadow-xl transition-all duration-300">
                     <CardContent className="p-4">
-                      <stat.icon className={`w-8 h-8 mx-auto mb-2 ${stat.color}`} />
+                      {stat.icon && <stat.icon className={`w-8 h-8 mx-auto mb-2 ${stat.color}`} />}
                       <div className="text-2xl font-bold text-gray-900 mb-1">
                         <AnimatedCounter end={stat.value} suffix={stat.suffix} />
                       </div>
@@ -362,7 +443,7 @@ export function EnhancedHeroSection() {
                       <div
                         className={`w-12 h-12 bg-gradient-to-r ${feature.color} rounded-full flex items-center justify-center mx-auto mb-4`}
                       >
-                        <feature.icon className="w-6 h-6 text-white" />
+                        {feature.icon && <feature.icon className="w-6 h-6 text-white" />}
                       </div>
                       <h4 className="font-semibold text-gray-900 mb-2">{feature.title}</h4>
                       <p className="text-sm text-gray-600">{feature.description}</p>
@@ -389,7 +470,7 @@ export function EnhancedHeroSection() {
                       transition={{ duration: 0.5 }}
                     >
                       <blockquote className="text-gray-700 mb-4 italic">
-                        "{testimonials[currentTestimonial].text}"
+                        {testimonials[currentTestimonial].text}
                       </blockquote>
                       <div className="flex items-center justify-between">
                         <div>
