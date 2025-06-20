@@ -1,119 +1,128 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { Plus, Pencil, Trash2 } from "lucide-react"
 
-/* -------------------------------------------------------------------------- */
-/* Types */
-/* -------------------------------------------------------------------------- */
-type PostStatus = "draft" | "published"
-
-interface Post {
-  id: number
+interface BlogPost {
+  id: string
   title: string
-  status: PostStatus
+  slug: string
+  excerpt: string
+  content: string
+  category: string
+  tags: string[]
+  author: string
+  publishedAt: string
+  isPublished: boolean
+  isFeatured: boolean
+  views: number
+  likes: number
 }
 
-/* -------------------------------------------------------------------------- */
-/* Component */
-/* -------------------------------------------------------------------------- */
-export default function BlogAdminPanel() {
-  /* ---------------------------------- State --------------------------------- */
-  const [posts, setPosts] = useState<Post[]>([
-    { id: 1, title: "First post", status: "published" },
-    { id: 2, title: "Second post", status: "draft" },
-  ])
+const categories = [
+  { id: "news", name: "اخبار و تغییرات", count: 45 },
+  { id: "guides", name: "راهنمای مهاجرت", count: 38 },
+  { id: "success-stories", name: "داستان‌های موفقیت", count: 28 },
+  { id: "lifestyle", name: "سبک زندگی", count: 25 },
+  { id: "expert-advice", name: "مشاوره تخصصی", count: 20 },
+]
 
-  /* ----------------------------- Event Handlers ----------------------------- */
-  const handleCreate = () => {
-    const nextId = posts.length ? Math.max(...posts.map((p) => p.id)) + 1 : 1
-    setPosts((prev) => [...prev, { id: nextId, title: `New post ${nextId}`, status: "draft" }])
-  }
+const mockPosts: BlogPost[] = [
+  {
+    id: "1",
+    title: "آخرین تغییرات قوانین مهاجرت به کانادا در سال ۲۰۲۵",
+    slug: "canada-immigration-changes-2025",
+    excerpt: "بررسی کامل جدیدترین تغییرات در سیستم Express Entry",
+    content: "محتوای کامل مقاله...",
+    category: "news",
+    tags: ["کانادا", "Express Entry", "قوانین جدید"],
+    author: "دکتر احمد محمدی",
+    publishedAt: "1403/10/15",
+    isPublished: true,
+    isFeatured: true,
+    views: 1250,
+    likes: 89,
+  },
+  // سایر مقالات...
+]
 
-  const handleEdit = (id: number) => {
-    // Replace with real edit logic (e.g., open modal or navigate)
-    alert(`Edit post #${id}`)
-  }
+export function BlogAdminPanel() {
+  const [posts, setPosts] = useState<BlogPost[]>(mockPosts)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState("all")
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
+  const [editingPost, setEditingPost] = useState<BlogPost | null>(null)
+  const [newPost, setNewPost] = useState({
+    title: "",
+    excerpt: "",
+    content: "",
+    category: "",
+    tags: "",
+    author: "",
+    isPublished: false,
+    isFeatured: false,
+  })
 
-  const handleDelete = (id: number) => {
-    if (confirm("Are you sure you want to delete this post?")) {
-      setPosts((prev) => prev.filter((p) => p.id !== id))
+  const filteredPosts = posts.filter(post => {
+    const matchesSearch = post.title.includes(searchTerm) || post.excerpt.includes(searchTerm)
+    const matchesCategory = selectedCategory === "all" || post.category === selectedCategory
+    return matchesSearch && matchesCategory
+  })
+
+  const handleCreatePost = () => {
+    const post: BlogPost = {
+      id: Date.now().toString(),
+      slug: newPost.title.toLowerCase().replace(/\s+/g, "-"),
+      ...newPost,
+      tags: newPost.tags.split(",").map(tag => tag.trim()),
+      publishedAt: new Date().toLocaleDateString("fa-IR"),
+      views: 0,
+      likes: 0,
     }
+    
+    setPosts([post, ...posts])
+    setNewPost({
+      title: "",
+      excerpt: "",
+      content: "",
+      category: "",
+      tags: "",
+      author: "",
+      isPublished: false,
+      isFeatured: false,
+    })
+    setIsCreateDialogOpen(false)
   }
 
-  /* ---------------------------------- UI ------------------------------------ */
+  const handleDeletePost = (id: string) => {
+    setPosts(posts.filter(post => post.id !== id))
+  }
+
+  const handleTogglePublish = (id: string) => {
+    setPosts(posts.map(post => 
+      post.id === id ? { ...post, isPublished: !post.isPublished } : post
+    ))
+  }
+
+  const handleToggleFeatured = (id: string) => {
+    setPosts(posts.map(post => 
+      post.id === id ? { ...post, isFeatured: !post.isFeatured } : post
+    ))
+  }
+
+  const stats = {
+    totalPosts: posts.length,
+    publishedPosts: posts.filter(p => p.isPublished).length,
+    draftPosts: posts.filter(p => !p.isPublished).length,
+    featuredPosts: posts.filter(p => p.isFeatured).length,
+    totalViews: posts.reduce((sum, p) => sum + p.views, 0),
+    totalLikes: posts.reduce((sum, p) => sum + p.likes, 0),
+  }
+
   return (
-    <Card className="w-full overflow-x-auto">
-      <CardHeader className="flex flex-row items-center justify-between gap-2">
-        <CardTitle className="text-lg font-semibold">Blog Admin Panel</CardTitle>
-
-        <Button onClick={handleCreate} variant="outline" className="bg-green-600 text-white hover:bg-green-700">
-          <Plus size={16} className="mr-2" />
-          New Post
-        </Button>
-      </CardHeader>
-
-      <CardContent className="p-0">
-        <table className="min-w-full text-sm">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="px-4 py-2 text-left">#</th>
-              <th className="px-4 py-2 text-left">Title</th>
-              <th className="px-4 py-2 text-left">Status</th>
-              <th className="px-4 py-2 text-left sr-only">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {posts.map((post) => (
-              <tr key={post.id} className="border-t last:border-b [&_td]:py-2 [&_td]:px-4">
-                <td>{post.id}</td>
-                <td>{post.title}</td>
-                <td>
-                  <span
-                    className={
-                      post.status === "published"
-                        ? "rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800"
-                        : "rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800"
-                    }
-                  >
-                    {post.status}
-                  </span>
-                </td>
-                <td className="flex items-center gap-2">
-                  <Button
-                    size="icon"
-                    variant="outline"
-                    onClick={() => handleEdit(post.id)}
-                    aria-label={`Edit ${post.title}`}
-                    className="bg-blue-600 text-white hover:bg-blue-700"
-                  >
-                    <Pencil size={16} />
-                  </Button>
-                  <Button
-                    size="icon"
-                    variant="outline"
-                    onClick={() => handleDelete(post.id)}
-                    aria-label={`Delete ${post.title}`}
-                    className="bg-red-600 text-white hover:bg-red-700"
-                  >
-                    <Trash2 size={16} />
-                  </Button>
-                </td>
-              </tr>
-            ))}
-
-            {posts.length === 0 && (
-              <tr>
-                <td colSpan={4} className="px-4 py-6 text-center text-gray-500">
-                  No posts found.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </CardContent>
-    </Card>
-  )
-}
+    <div className="min-h-screen bg-gray-50" dir="rtl">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">مدیریت وبلاگ</h1>
+            <p className="text-gray-600 mt-2">مدیریت مقالات و محتوای وبلاگ د\
