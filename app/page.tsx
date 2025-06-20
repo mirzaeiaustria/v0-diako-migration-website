@@ -2,8 +2,8 @@
 
 import { EnhancedHeroSection } from "@/components/enhanced-hero-section"
 import { MigrationMethodsSection } from "@/components/migration-methods-section"
-import { AdvancedMigrationWizard } from "@/components/advanced-migration-wizard" // New import
-import { InteractiveWorldMap } from "@/components/interactive-world-map" // Updated import
+import { AdvancedMigrationWizard } from "@/components/advanced-migration-wizard"
+import { InteractiveWorldMap } from "@/components/interactive-world-map"
 import { MigrationStatistics } from "@/components/migration-statistics"
 import { MigrationSuccessStories } from "@/components/migration-success-stories"
 import { MigrantExperiences } from "@/components/migrant-experiences"
@@ -11,6 +11,11 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import { ParallaxSection } from "@/components/ui/parallax-section"
 import { motion } from "framer-motion"
 import { AdvancedAIToolsSection } from "@/components/advanced-ai-tools-section"
+import { PodcastSection } from "@/components/podcast-section"
+import { MobileAppSection } from "@/components/mobile-app-section"
+import { YoutubeSection } from "@/components/youtube-section"
+import { RealTimeChat } from "@/components/real-time-chat"
+import { WhyChooseDiako } from "@/components/why-choose-diako"
 import {
   Phone,
   Globe,
@@ -224,6 +229,9 @@ export default function DiacoHomePage() {
       {/* Advanced AI Tools Section */}
       <AdvancedAIToolsSection />
 
+      {/* Why Choose Diako Section */}
+      <WhyChooseDiako />
+
       {/* Services Section */}
       <ParallaxSection className="py-20 bg-gradient-to-br from-blue-50 to-teal-50" id="services">
         <div className="container mx-auto px-4">
@@ -325,7 +333,7 @@ export default function DiacoHomePage() {
           </ScrollReveal>
 
           <ScrollReveal direction="up" delay={0.2}>
-            <AdvancedMigrationWizard /> {/* Replaced MigrationMethodWizard with AdvancedMigrationWizard */}
+            <AdvancedMigrationWizard />
           </ScrollReveal>
         </div>
       </section>
@@ -341,10 +349,19 @@ export default function DiacoHomePage() {
           </ScrollReveal>
 
           <ScrollReveal direction="up" delay={0.2}>
-            <InteractiveWorldMap /> {/* Updated to the new InteractiveWorldMap */}
+            <InteractiveWorldMap />
           </ScrollReveal>
         </div>
       </ParallaxSection>
+
+      {/* Podcast Section */}
+      <PodcastSection />
+
+      {/* YouTube Section */}
+      <YoutubeSection />
+
+      {/* Mobile App Section */}
+      <MobileAppSection />
 
       {/* Migration Statistics Section */}
       <section className="py-20 bg-white" id="statistics">
@@ -632,6 +649,9 @@ export default function DiacoHomePage() {
           </ScrollReveal>
         </div>
       </footer>
+
+      {/* Real-time Chat Component */}
+      <RealTimeChat />
     </div>
   )
 }
