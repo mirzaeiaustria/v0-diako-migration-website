@@ -5,6 +5,7 @@ import { useRef, useState } from "react"
 import { Phone, Mail, Globe, MessageSquare, Instagram, Linkedin, ArrowLeft, Star, Award, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { socialMediaLinks, contactInfo } from "@/lib/comprehensive-immigration-data"
 
 export function InteractiveBanner() {
   const ref = useRef(null)
@@ -44,15 +45,15 @@ export function InteractiveBanner() {
   }
 
   const socialLinks = [
-    { icon: MessageSquare, label: "تلگرام", href: "#", color: "bg-blue-500" },
-    { icon: Instagram, label: "اینستاگرام", href: "#", color: "bg-pink-500" },
-    { icon: Linkedin, label: "لینکدین", href: "#", color: "bg-blue-700" },
+    { icon: MessageSquare, label: "تلگرام", href: socialMediaLinks.telegram, color: "bg-blue-500" },
+    { icon: Instagram, label: "اینستاگرام", href: socialMediaLinks.instagram.main, color: "bg-pink-500" },
+    { icon: Linkedin, label: "لینکدین", href: socialMediaLinks.linkedin, color: "bg-blue-700" },
   ]
 
-  const contactInfo = [
-    { icon: Phone, text: "021-8807-3287", href: "tel:02188073287" },
-    { icon: Mail, text: "info@diaco.eu", href: "mailto:info@diaco.eu" },
-    { icon: Globe, text: "diaco.eu", href: "https://diaco.eu" },
+  const contactInfoItems = [
+    { icon: Phone, text: contactInfo.phone, href: `tel:${contactInfo.phone.replace(/-/g, "")}` },
+    { icon: Mail, text: contactInfo.email, href: `mailto:${contactInfo.email}` },
+    { icon: Globe, text: contactInfo.website, href: `https://${contactInfo.website}` },
   ]
 
   const achievements = [
@@ -153,7 +154,7 @@ export function InteractiveBanner() {
 
               {/* Contact Buttons */}
               <motion.div className="flex flex-wrap gap-2" variants={itemVariants}>
-                {contactInfo.slice(0, 2).map((contact, index) => (
+                {contactInfoItems.slice(0, 2).map((contact, index) => (
                   <motion.a
                     key={index}
                     href={contact.href}
@@ -177,6 +178,8 @@ export function InteractiveBanner() {
                 <motion.a
                   key={index}
                   href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={`w-10 h-10 ${social.color} rounded-full flex items-center justify-center text-white shadow-lg`}
                   whileHover={{ scale: 1.1, y: -2 }}
                   whileTap={{ scale: 0.9 }}
@@ -194,9 +197,12 @@ export function InteractiveBanner() {
               <Button
                 className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
                 size="lg"
+                asChild
               >
-                مشاوره رایگان
-                <ArrowLeft className="w-4 h-4 mr-2" />
+                <a href="https://calendly.com/diaco-holding/15min" target="_blank" rel="noopener noreferrer">
+                  مشاوره رایگان
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                </a>
               </Button>
             </motion.div>
 
@@ -233,7 +239,7 @@ export function InteractiveBanner() {
           >
             <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">آماده شروع مسیر مهاجرت هستید؟</h3>
             <div className="grid grid-cols-1 gap-3">
-              {contactInfo.map((contact, index) => (
+              {contactInfoItems.map((contact, index) => (
                 <motion.a
                   key={index}
                   href={contact.href}
@@ -247,8 +253,10 @@ export function InteractiveBanner() {
               ))}
             </div>
             <motion.div className="mt-4 text-center" whileHover={{ scale: 1.05 }}>
-              <Button className="w-full bg-gradient-to-r from-blue-600 to-teal-600 text-white">
-                شروع مشاوره رایگان
+              <Button className="w-full bg-gradient-to-r from-blue-600 to-teal-600 text-white" asChild>
+                <a href="https://calendly.com/diaco-holding/15min" target="_blank" rel="noopener noreferrer">
+                  شروع مشاوره رایگان
+                </a>
               </Button>
             </motion.div>
           </motion.div>

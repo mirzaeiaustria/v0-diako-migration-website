@@ -1,27 +1,32 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
   MessageSquare,
   Users,
-  TrendingUp,
-  Star,
+  Heart,
+  MessageCircle,
+  Share2,
   Search,
   Filter,
   Plus,
-  Crown,
-  Zap,
+  Star,
+  Eye,
+  ThumbsUp,
+  Award,
   Globe,
   BookOpen,
   HelpCircle,
   Lightbulb,
+  CheckCircle,
 } from "lucide-react"
 
 interface ForumPost {
@@ -31,20 +36,19 @@ interface ForumPost {
   author: {
     name: string
     avatar: string
-    badge: string
     reputation: number
     country: string
+    status: "verified" | "expert" | "member"
   }
   category: string
   tags: string[]
   likes: number
   replies: number
   views: number
-  createdAt: string
-  isHot: boolean
+  createdAt: Date
+  isLiked: boolean
   isPinned: boolean
-  hasAnswer: boolean
-  difficulty: "beginner" | "intermediate" | "advanced"
+  isSolved: boolean
 }
 
 interface ForumCategory {
@@ -52,9 +56,8 @@ interface ForumCategory {
   name: string
   description: string
   icon: any
-  color: string
   postCount: number
-  activeUsers: number
+  color: string
 }
 
 const forumCategories: ForumCategory[] = [
@@ -63,222 +66,248 @@ const forumCategories: ForumCategory[] = [
     name: "بحث عمومی",
     description: "سوالات و بحث‌های عمومی درباره مهاجرت",
     icon: MessageSquare,
+    postCount: 1250,
     color: "bg-blue-500",
-    postCount: 1247,
-    activeUsers: 89,
-  },
-  {
-    id: "countries",
-    name: "کشورها",
-    description: "اطلاعات و تجربیات مربوط به کشورهای مختلف",
-    icon: Globe,
-    color: "bg-green-500",
-    postCount: 892,
-    activeUsers: 156,
-  },
-  {
-    id: "documents",
-    name: "مدارک و قوانین",
-    description: "راهنمایی درباره مدارک و قوانین مهاجرت",
-    icon: BookOpen,
-    color: "bg-purple-500",
-    postCount: 634,
-    activeUsers: 78,
   },
   {
     id: "experiences",
     name: "تجربیات شخصی",
-    description: "داستان‌ها و تجربیات واقعی مهاجران",
-    icon: Star,
-    color: "bg-orange-500",
-    postCount: 445,
-    activeUsers: 92,
+    description: "تجربیات واقعی مهاجران",
+    icon: BookOpen,
+    postCount: 890,
+    color: "bg-green-500",
   },
   {
-    id: "help",
-    name: "کمک و راهنمایی",
-    description: "درخواست کمک و ارائه راهنمایی",
+    id: "questions",
+    name: "سوال و جواب",
+    description: "سوالات تخصصی و پاسخ‌های کارشناسی",
     icon: HelpCircle,
-    color: "bg-red-500",
-    postCount: 789,
-    activeUsers: 134,
+    postCount: 2100,
+    color: "bg-orange-500",
   },
   {
     id: "tips",
-    name: "نکات و ترفندها",
-    description: "نکات مفید و ترفندهای کاربردی",
+    name: "نکات و راهنمایی",
+    description: "نکات کاربردی و راهنمایی‌های مفید",
     icon: Lightbulb,
+    postCount: 650,
+    color: "bg-purple-500",
+  },
+  {
+    id: "countries",
+    name: "کشورها",
+    description: "بحث درباره کشورهای مختلف",
+    icon: Globe,
+    postCount: 1800,
+    color: "bg-teal-500",
+  },
+  {
+    id: "success",
+    name: "داستان‌های موفقیت",
+    description: "داستان‌های موفقیت و الهام‌بخش",
+    icon: Award,
+    postCount: 420,
     color: "bg-yellow-500",
-    postCount: 356,
-    activeUsers: 67,
   },
 ]
 
 const samplePosts: ForumPost[] = [
   {
     id: "1",
-    title: "تجربه من از مهاجرت تحصیلی به آلمان - راهنمای کامل",
-    content: "سلام دوستان، می‌خواهم تجربه کامل مهاجرت تحصیلی خودم به آلمان را با شما به اشتراک بگذارم...",
+    title: "تجربه من از اکسپرس اینتری کانادا - راهنمای کامل",
+    content: "سلام دوستان، می‌خواهم تجربه کامل خودم از فرآیند اکسپرس اینتری کانادا را با شما به اشتراک بگذارم...",
     author: {
-      name: "علی محمدی",
-      avatar: "/placeholder.svg?height=40&width=40",
-      badge: "کارشناس مهاجرت",
-      reputation: 2847,
-      country: "آلمان",
+      name: "علی رضایی",
+      avatar: "/users/ali-rezaei.jpg",
+      reputation: 1250,
+      country: "کانادا",
+      status: "verified",
     },
     category: "experiences",
-    tags: ["آلمان", "تحصیل", "دانشگاه", "ویزا"],
-    likes: 156,
+    tags: ["کانادا", "اکسپرس اینتری", "تجربه شخصی"],
+    likes: 45,
     replies: 23,
-    views: 1247,
-    createdAt: "2 ساعت پیش",
-    isHot: true,
+    views: 890,
+    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+    isLiked: false,
     isPinned: true,
-    hasAnswer: true,
-    difficulty: "intermediate",
+    isSolved: false,
   },
   {
     id: "2",
-    title: "سوال درباره مدارک مورد نیاز برای ویزای کار کانادا",
-    content: "دوستان عزیز، کسی اطلاعاتی درباره مدارک دقیق مورد نیاز برای ویزای کار کانادا دارد؟",
+    title: "سوال درباره مدارک مورد نیاز برای آوسبیلدونگ آلمان",
+    content: "سلام، می‌خواستم بدانم برای آوسبیلدونگ در آلمان چه مداركی لازم است؟",
     author: {
       name: "مریم احمدی",
-      avatar: "/placeholder.svg?height=40&width=40",
-      badge: "عضو جدید",
-      reputation: 45,
+      avatar: "/users/maryam-ahmadi.jpg",
+      reputation: 320,
       country: "ایران",
+      status: "member",
     },
-    category: "help",
-    tags: ["کانادا", "ویزای کار", "مدارک"],
+    category: "questions",
+    tags: ["آلمان", "آوسبیلدونگ", "مدارک"],
     likes: 12,
     replies: 8,
-    views: 234,
-    createdAt: "5 ساعت پیش",
-    isHot: false,
+    views: 156,
+    createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000),
+    isLiked: true,
     isPinned: false,
-    hasAnswer: false,
-    difficulty: "beginner",
+    isSolved: true,
   },
   {
     id: "3",
-    title: "مقایسه زندگی در اسپانیا و پرتغال برای مهاجران",
-    content: "بعد از 3 سال زندگی در اسپانیا و 2 سال در پرتغال، می‌خواهم تجربیاتم را با شما به اشتراک بگذارم...",
+    title: "نکات مهم برای مصاحبه ویزای تحصیلی",
+    content: "بر اساس تجربه‌ام، این نکات برای مصاحبه ویزای تحصیلی بسیار مهم هستند...",
     author: {
-      name: "رضا کریمی",
-      avatar: "/placeholder.svg?height=40&width=40",
-      badge: "مهاجر باتجربه",
-      reputation: 1523,
-      country: "اسپانیا",
-    },
-    category: "countries",
-    tags: ["اسپانیا", "پرتغال", "مقایسه", "زندگی"],
-    likes: 89,
-    replies: 15,
-    views: 567,
-    createdAt: "1 روز پیش",
-    isHot: true,
-    isPinned: false,
-    hasAnswer: true,
-    difficulty: "advanced",
-  },
-  {
-    id: "4",
-    title: "نکات مهم برای آماده‌سازی مصاحبه ویزا",
-    content: "چند نکته کلیدی که در مصاحبه ویزا باید رعایت کنید تا شانس قبولی‌تان بالا برود...",
-    author: {
-      name: "سارا موسوی",
-      avatar: "/placeholder.svg?height=40&width=40",
-      badge: "مشاور مهاجرت",
-      reputation: 3456,
-      country: "کانادا",
+      name: "دکتر حسین کریمی",
+      avatar: "/users/hossein-karimi.jpg",
+      reputation: 2100,
+      country: "آلمان",
+      status: "expert",
     },
     category: "tips",
-    tags: ["مصاحبه", "ویزا", "نکات", "آمادگی"],
-    likes: 234,
-    replies: 31,
-    views: 1890,
-    createdAt: "3 روز پیش",
-    isHot: true,
+    tags: ["مصاحبه", "ویزای تحصیلی", "نکات"],
+    likes: 78,
+    replies: 15,
+    views: 445,
+    createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+    isLiked: false,
     isPinned: false,
-    hasAnswer: true,
-    difficulty: "intermediate",
+    isSolved: false,
   },
 ]
 
 export function EnhancedCommunityForum() {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
-  const [searchTerm, setSearchTerm] = useState('')
-  const [sortBy, setSortBy] = useState('latest')
   const [posts, setPosts] = useState<ForumPost[]>(samplePosts)
-  const [selectedPost, setSelectedPost] = useState<string | null>(null)
-  const [showNewPostForm, setShowNewPostForm] = useState(false)
-  const [onlineUsers, setOnlineUsers] = useState(342)
+  const [selectedCategory, setSelectedCategory] = useState<string>("all")
+  const [searchTerm, setSearchTerm] = useState("")
+  const [sortBy, setSortBy] = useState("latest")
+  const [isNewPostOpen, setIsNewPostOpen] = useState(false)
+  const [newPost, setNewPost] = useState({
+    title: "",
+    content: "",
+    category: "",
+    tags: "",
+  })
 
-  // Simulate real-time updates
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setOnlineUsers(prev => prev + Math.floor(Math.random() * 10) - 5)
-    }, 5000)
-    return () => clearInterval(interval)
-  }, [])
-
-  const filteredPosts = posts.filter(post => {
-    const matchesCategory = selectedCategory === 'all' || post.category === selectedCategory
-    const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         post.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+  const filteredPosts = posts.filter((post) => {
+    const matchesCategory = selectedCategory === "all" || post.category === selectedCategory
+    const matchesSearch =
+      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      post.tags.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase()))
     return matchesCategory && matchesSearch
   })
 
   const sortedPosts = [...filteredPosts].sort((a, b) => {
     switch (sortBy) {
-      case 'popular':
+      case "latest":
+        return b.createdAt.getTime() - a.createdAt.getTime()
+      case "popular":
         return b.likes - a.likes
-      case 'replies':
+      case "replies":
         return b.replies - a.replies
-      case 'views':
+      case "views":
         return b.views - a.views
       default:
-        return 0 // Latest is default order
+        return 0
     }
   })
 
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'beginner': return 'bg-green-100 text-green-800'
-      case 'intermediate': return 'bg-yellow-100 text-yellow-800'
-      case 'advanced': return 'bg-red-100 text-red-800'
-      default: return 'bg-gray-100 text-gray-800'
+  const handleLike = (postId: string) => {
+    setPosts((prev) =>
+      prev.map((post) =>
+        post.id === postId
+          ? { ...post, isLiked: !post.isLiked, likes: post.isLiked ? post.likes - 1 : post.likes + 1 }
+          : post,
+      ),
+    )
+  }
+
+  const handleNewPost = () => {
+    if (!newPost.title || !newPost.content || !newPost.category) return
+
+    const post: ForumPost = {
+      id: Date.now().toString(),
+      title: newPost.title,
+      content: newPost.content,
+      author: {
+        name: "شما",
+        avatar: "/placeholder-user.jpg",
+        reputation: 0,
+        country: "ایران",
+        status: "member",
+      },
+      category: newPost.category,
+      tags: newPost.tags
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter(Boolean),
+      likes: 0,
+      replies: 0,
+      views: 0,
+      createdAt: new Date(),
+      isLiked: false,
+      isPinned: false,
+      isSolved: false,
+    }
+
+    setPosts((prev) => [post, ...prev])
+    setNewPost({ title: "", content: "", category: "", tags: "" })
+    setIsNewPostOpen(false)
+  }
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case "verified":
+        return <Badge className="bg-blue-100 text-blue-800">تأیید شده</Badge>
+      case "expert":
+        return <Badge className="bg-purple-100 text-purple-800">کارشناس</Badge>
+      case "member":
+        return <Badge variant="outline">عضو</Badge>
+      default:
+        return null
     }
   }
 
-  const getDifficultyText = (difficulty: string) => {
-    switch (difficulty) {
-      case 'beginner': return 'مبتدی'
-      case 'intermediate': return 'متوسط'
-      case 'advanced': return 'پیشرفته'
-      default: return 'نامشخص'
-    }
+  const getCategoryIcon = (categoryId: string) => {
+    const category = forumCategories.find((cat) => cat.id === categoryId)
+    return category?.icon || MessageSquare
+  }
+
+  const getCategoryColor = (categoryId: string) => {
+    const category = forumCategories.find((cat) => cat.id === categoryId)
+    return category?.color || "bg-gray-500"
+  }
+
+  const formatTimeAgo = (date: Date) => {
+    const now = new Date()
+    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60))
+
+    if (diffInHours < 1) return "کمتر از یک ساعت پیش"
+    if (diffInHours < 24) return `${diffInHours} ساعت پیش`
+
+    const diffInDays = Math.floor(diffInHours / 24)
+    if (diffInDays < 7) return `${diffInDays} روز پیش`
+
+    const diffInWeeks = Math.floor(diffInDays / 7)
+    return `${diffInWeeks} هفته پیش`
   }
 
   return (
     <div className="space-y-8">
       {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center"
-      >
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center">
         <div className="flex items-center justify-center gap-3 mb-4">
           <motion.div
-            animate={{ 
+            animate={{
+              scale: [1, 1.1, 1],
               rotate: [0, 10, -10, 0],
-              scale: [1, 1.1, 1]
             }}
-            transition={{ 
-              duration: 2, 
+            transition={{
+              duration: 2,
               repeat: Number.POSITIVE_INFINITY,
-              ease: "easeInOut"
+              ease: "easeInOut",
             }}
             className="w-12 h-12 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center"
           >
@@ -289,215 +318,332 @@ export function EnhancedCommunityForum() {
           </h2>
         </div>
         <p className="text-gray-600 max-w-2xl mx-auto">
-          به بزرگترین انجمن آنلاین مهاجران فارسی‌زبان خوش آمدید. تجربیات خود را به اشتراک بگذارید و از دیگران یاد بگیرید
+          به بزرگترین انجمن آنلاین مهاجران فارسی‌زبان بپیوندید و تجربیات خود را به اشتراک بگذارید
         </p>
       </motion.div>
 
-      {/* Stats Bar */}
-      <Card className="border-2 border-green-200 bg-gradient-to-r from-green-50 to-blue-50">
-        <CardContent className="p-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {[
+          { label: "اعضای فعال", value: "12,500+", icon: Users, color: "text-blue-600" },
+          { label: "پست‌ها", value: "8,200+", icon: MessageSquare, color: "text-green-600" },
+          { label: "پاسخ‌ها", value: "25,000+", icon: MessageCircle, color: "text-orange-600" },
+          { label: "کارشناسان", value: "150+", icon: Award, color: "text-purple-600" },
+        ].map((stat, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            whileHover={{ scale: 1.05 }}
+          >
+            <Card className="text-center hover:shadow-lg transition-all duration-300">
+              <CardContent className="p-4">
+                <stat.icon className={`w-8 h-8 mx-auto mb-2 ${stat.color}`} />
+                <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
+                <div className="text-sm text-gray-600">{stat.label}</div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Categories */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Filter className="w-5 h-5" />
+            دسته‌بندی‌ها
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.1 }}
-              className="text-center"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                selectedCategory === "all" ? "border-blue-500 bg-blue-50" : "border-gray-200 hover:border-blue-300"
+              }`}
+              onClick={() => setSelectedCategory("all")}
             >
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <Users className="w-5 h-5 text-green-600" />
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <div className="text-center">
+                <MessageSquare className="w-6 h-6 mx-auto mb-2 text-blue-600" />
+                <div className="font-medium text-sm">همه</div>
+                <div className="text-xs text-gray-500">{posts.length}</div>
               </div>
-              <div className="text-2xl font-bold text-green-600">{onlineUsers.toLocaleString()}</div>
-              <div className="text-sm text-gray-600">کاربر آنلاین</div>
             </motion.div>
 
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className="text-center"
-            >
-              <MessageSquare className="w-5 h-5 text-blue-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-blue-600">
-                {forumCategories.reduce((sum, cat) => sum + cat.postCount, 0).toLocaleString()}
-              </div>
-              <div className="text-sm text-gray-600">پست کل</div>
-            </motion.div>
-
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.3 }}
-              className="text-center"
-            >
-              <TrendingUp className="w-5 h-5 text-purple-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-purple-600">15,847</div>
-              <div className="text-sm text-gray-600">عضو فعال</div>
-            </motion.div>
-
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.4 }}
-              className="text-center"
-            >
-              <Star className="w-5 h-5 text-orange-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-orange-600">98%</div>
-              <div className="text-sm text-gray-600">رضایت کاربران</div>
-            </motion.div>
+            {forumCategories.map((category, index) => (
+              <motion.div
+                key={category.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                  selectedCategory === category.id
+                    ? "border-blue-500 bg-blue-50"
+                    : "border-gray-200 hover:border-blue-300"
+                }`}
+                onClick={() => setSelectedCategory(category.id)}
+              >
+                <div className="text-center">
+                  <div
+                    className={`w-8 h-8 ${category.color} rounded-full flex items-center justify-center mx-auto mb-2`}
+                  >
+                    <category.icon className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="font-medium text-sm">{category.name}</div>
+                  <div className="text-xs text-gray-500">{category.postCount}</div>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </CardContent>
       </Card>
 
-      {/* Main Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* Categories Sidebar */}
-        <div className="lg:col-span-1">
-          <Card className="sticky top-4">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Filter className="w-5 h-5" />
-                دسته‌بندی‌ها
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className={`p-3 rounded-lg cursor-pointer transition-all ${
-                  selectedCategory === 'all' 
-                    ? 'bg-blue-100 border-blue-300 border' 
-                    : 'hover:bg-gray-50'
-                }`}
-                onClick={() => setSelectedCategory('all')}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
-                    <span className="font-medium">همه دسته‌ها</span>
-                  </div>
-                  <Badge variant="outline">
-                    {forumCategories.reduce((sum, cat) => sum + cat.postCount, 0)}
-                  </Badge>
-                </div>
-              </motion.div>
+      {/* Search and Controls */}
+      <Card>
+        <CardContent className="p-6">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1 relative">
+              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Input
+                placeholder="جستجو در انجمن..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
 
-              {forumCategories.map((category, index) => (
-                <motion.div
-                  key={category.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`p-3 rounded-lg cursor-pointer transition-all ${
-                    selectedCategory === category.id 
-                      ? 'bg-blue-100 border-blue-300 border' 
-                      : 'hover:bg-gray-50'
-                  }`}
-                  onClick={() => setSelectedCategory(category.id)}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-3 h-3 ${category.color} rounded-full`}></div>
-                      <span className="font-medium text-sm">{category.name}</span>
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger className="w-48">
+                <SelectValue placeholder="مرتب‌سازی" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="latest">جدیدترین</SelectItem>
+                <SelectItem value="popular">محبوب‌ترین</SelectItem>
+                <SelectItem value="replies">بیشترین پاسخ</SelectItem>
+                <SelectItem value="views">بیشترین بازدید</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Button
+              onClick={() => setIsNewPostOpen(true)}
+              className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              پست جدید
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Posts List */}
+      <div className="space-y-4">
+        <AnimatePresence>
+          {sortedPosts.map((post, index) => (
+            <motion.div
+              key={post.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ delay: index * 0.05 }}
+              whileHover={{ y: -2 }}
+            >
+              <Card className="hover:shadow-lg transition-all duration-300 overflow-hidden">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    {/* Author Avatar */}
+                    <Avatar className="w-12 h-12">
+                      <AvatarImage src={post.author.avatar || "/placeholder-user.jpg"} alt={post.author.name} />
+                      <AvatarFallback>{post.author.name.charAt(0)}</AvatarFallback>
+                    </Avatar>
+
+                    {/* Post Content */}
+                    <div className="flex-1">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          {post.isPinned && (
+                            <Badge className="bg-yellow-100 text-yellow-800">
+                              <Star className="w-3 h-3 mr-1" />
+                              سنجاق شده
+                            </Badge>
+                          )}
+                          {post.isSolved && (
+                            <Badge className="bg-green-100 text-green-800">
+                              <CheckCircle className="w-3 h-3 mr-1" />
+                              حل شده
+                            </Badge>
+                          )}
+                        </div>
+                        <div className="text-xs text-gray-500">{formatTimeAgo(post.createdAt)}</div>
+                      </div>
+
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-blue-600 cursor-pointer">
+                        {post.title}
+                      </h3>
+
+                      <p className="text-gray-600 mb-3 line-clamp-2">{post.content}</p>
+
+                      {/* Author Info */}
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="font-medium text-sm">{post.author.name}</span>
+                        {getStatusBadge(post.author.status)}
+                        <span className="text-xs text-gray-500">• {post.author.reputation} امتیاز</span>
+                        <span className="text-xs text-gray-500">• {post.author.country}</span>
+                      </div>
+
+                      {/* Tags */}
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {post.tags.map((tag, tagIndex) => (
+                          <Badge key={tagIndex} variant="outline" className="text-xs">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+
+                      {/* Post Stats and Actions */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4 text-sm text-gray-500">
+                          <div className="flex items-center gap-1">
+                            <Eye className="w-4 h-4" />
+                            <span>{post.views}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <MessageCircle className="w-4 h-4" />
+                            <span>{post.replies}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Heart className={`w-4 h-4 ${post.isLiked ? "text-red-500 fill-red-500" : ""}`} />
+                            <span>{post.likes}</span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleLike(post.id)}
+                            className={post.isLiked ? "text-red-500" : ""}
+                          >
+                            <ThumbsUp className="w-4 h-4 mr-1" />
+                            پسندیدن
+                          </Button>
+                          <Button variant="ghost" size="sm">
+                            <MessageCircle className="w-4 h-4 mr-1" />
+                            پاسخ
+                          </Button>
+                          <Button variant="ghost" size="sm">
+                            <Share2 className="w-4 h-4 mr-1" />
+                            اشتراک
+                          </Button>
+                        </div>
+                      </div>
                     </div>
-                    <Badge variant="outline" className="text-xs">
-                      {category.postCount}
-                    </Badge>
-                  </div>
-                  <p className="text-xs text-gray-600 mb-2">{category.description}</p>
-                  <div className="flex items-center gap-2 text-xs text-gray-500">
-                    <Users className="w-3 h-3" />
-                    <span>{category.activeUsers} فعال</span>
-                  </div>
-                </motion.div>
-              ))}
-            </CardContent>
-          </Card>
-        </div>
 
-        {/* Posts List */}
-        <div className="lg:col-span-3">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2">
-                  <MessageSquare className="w-6 h-6" />
-                  آخرین پست‌ها
-                </CardTitle>
-                <Button
-                  onClick={() => setShowNewPostForm(true)}
-                  className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  پست جدید
-                </Button>
-              </div>
-              
-              {/* Search and Filter */}
-              <div className="flex gap-4 mt-4">
-                <div className="relative flex-1">
-                  <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                    {/* Category Icon */}
+                    <div
+                      className={`w-10 h-10 ${getCategoryColor(post.category)} rounded-full flex items-center justify-center`}
+                    >
+                      {(() => {
+                        const CategoryIcon = getCategoryIcon(post.category)
+                        return <CategoryIcon className="w-5 h-5 text-white" />
+                      })()}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
+
+      {/* New Post Modal */}
+      <AnimatePresence>
+        {isNewPostOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            onClick={() => setIsNewPostOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="text-xl font-bold mb-4">پست جدید</h3>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">عنوان</label>
                   <Input
-                    placeholder="جستجو در پست‌ها..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
+                    value={newPost.title}
+                    onChange={(e) => setNewPost((prev) => ({ ...prev, title: e.target.value }))}
+                    placeholder="عنوان پست خود را وارد کنید"
                   />
                 </div>
-                <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-40">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="latest">جدیدترین</SelectItem>
-                    <SelectItem value="popular">محبوب‌ترین</SelectItem>
-                    <SelectItem value="replies">بیشترین پاسخ</SelectItem>
-                    <SelectItem value="views">بیشترین بازدید</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <AnimatePresence>
-                {sortedPosts.map((post, index) => (
-                  <motion.div
-                    key={post.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ delay: index * 0.1 }}
-                    className={`border rounded-lg p-4 cursor-pointer transition-all hover:shadow-md ${
-                      selectedPost === post.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
-                    }`}
-                    onClick={() => setSelectedPost(selectedPost === post.id ? null : post.id)}
-                  >
-                    <div className="flex items-start gap-4">
-                      <Avatar className="w-12 h-12">
-                        <AvatarImage src={post.author.avatar || "/placeholder.svg"} alt={post.author.name} />
-                        <AvatarFallback>{post.author.name.charAt(0)}</AvatarFallback>
-                      </Avatar>
 
-                      <div className="flex-1">
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              {post.isPinned && <Crown className="w-4 h-4 text-yellow-500" />}
-                              {post.isHot && <Zap className="w-4 h-4 text-red-500" />}
-                              <h3 className="font-semibold text-lg hover:text-blue-600 transition-colors">
-                                {post.title}
-                              </h3>
-                            </div>
-                            
-                            <div className="flex items-center gap-2 mb-2">
-                              <span className="text-sm font-medium text-blue-600">{post.author.name}</span>
-                              <Badge variant="outline" className="text-xs">
-                                {post.author.badge}
-                              </Badge>
-                              <Badge className={getDifficultyColor(post.difficulty)}>
-                                {getDifficultyText(post.difficulty)}
-                              </Badge>
-                              {post.hasAnswer && (
-                                <Badge className="bg-green-100 text-green-800">
-                                  پاس\
+                <div>
+                  <label className="block text-sm font-medium mb-2">دسته‌بندی</label>
+                  <Select
+                    value={newPost.category}
+                    onValueChange={(value) => setNewPost((prev) => ({ ...prev, category: value }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="انتخاب دسته‌بندی" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {forumCategories.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">محتوا</label>
+                  <Textarea
+                    value={newPost.content}
+                    onChange={(e) => setNewPost((prev) => ({ ...prev, content: e.target.value }))}
+                    placeholder="محتوای پست خود را بنویسید..."
+                    rows={6}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">برچسب‌ها (با کاما جدا کنید)</label>
+                  <Input
+                    value={newPost.tags}
+                    onChange={(e) => setNewPost((prev) => ({ ...prev, tags: e.target.value }))}
+                    placeholder="مثال: کانادا, اکسپرس اینتری, تجربه"
+                  />
+                </div>
+
+                <div className="flex gap-4 pt-4">
+                  <Button
+                    onClick={handleNewPost}
+                    disabled={!newPost.title || !newPost.content || !newPost.category}
+                    className="flex-1"
+                  >
+                    انتشار پست
+                  </Button>
+                  <Button variant="outline" onClick={() => setIsNewPostOpen(false)} className="flex-1">
+                    انصراف
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
