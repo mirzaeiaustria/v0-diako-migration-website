@@ -16,6 +16,7 @@ import { MobileAppSection } from "@/components/mobile-app-section"
 import { YoutubeSection } from "@/components/youtube-section"
 import { RealTimeChat } from "@/components/real-time-chat"
 import { WhyChooseDiako } from "@/components/why-choose-diako"
+import { MigrationMethodsFAQ } from "@/components/migration-methods-faq"
 import {
   Phone,
   Globe,
@@ -54,6 +55,7 @@ const services = [
     color: "bg-blue-500",
     successRate: "85%",
     avgTime: "4-8 ماه",
+    link: "#services",
   },
   {
     id: "work",
@@ -65,6 +67,7 @@ const services = [
     color: "bg-green-500",
     successRate: "78%",
     avgTime: "6-12 ماه",
+    link: "#wizard",
   },
   {
     id: "investment",
@@ -76,6 +79,7 @@ const services = [
     color: "bg-purple-500",
     successRate: "92%",
     avgTime: "3-6 ماه",
+    link: "#countries",
   },
   {
     id: "family",
@@ -87,6 +91,7 @@ const services = [
     color: "bg-orange-500",
     successRate: "88%",
     avgTime: "8-18 ماه",
+    link: "#statistics",
   },
   {
     id: "ausbildung",
@@ -98,6 +103,7 @@ const services = [
     color: "bg-red-500",
     successRate: "95%",
     avgTime: "2-4 ماه",
+    link: "#smart-features",
   },
   {
     id: "language",
@@ -109,6 +115,7 @@ const services = [
     color: "bg-teal-500",
     successRate: "90%",
     avgTime: "3-6 ماه",
+    link: "#newsletter",
   },
 ]
 
@@ -118,24 +125,28 @@ const smartFeatures = [
     description: "تحلیل دقیق پروفایل شما و پیشنهاد بهترین مسیرهای مهاجرت",
     icon: Brain,
     color: "bg-blue-500",
+    link: "#wizard",
   },
   {
     title: "مقایسه پیشرفته روش‌ها",
     description: "مقایسه جامع روش‌های مختلف مهاجرت بر اساس معیارهای متنوع",
     icon: BarChart3,
     color: "bg-green-500",
+    link: "#statistics",
   },
   {
     title: "محاسبه‌گر هزینه",
     description: "برآورد دقیق هزینه‌های مهاجرت و زندگی در کشور مقصد",
     icon: Calculator,
     color: "bg-purple-500",
+    link: "#countries",
   },
   {
     title: "تقویم مهاجرتی شخصی",
     description: "برنامه‌ریزی زمانی دقیق برای تمام مراحل مهاجرت",
     icon: Clock,
     color: "bg-orange-500",
+    link: "#contact",
   },
 ]
 
@@ -144,48 +155,65 @@ const features = [
     title: "هوش مصنوعی پیشرفته",
     description: "سامانه هوشمند تحلیل شرایط و پیشنهاد بهترین مسیر مهاجرت",
     icon: Brain,
+    link: "#smart-features",
   },
   {
     title: "ویزارد انتخاب روش",
     description: "ابزار تعاملی برای انتخاب بهترین روش مهاجرت بر اساس شرایط شما",
     icon: Sparkles,
+    link: "#wizard",
   },
   {
     title: "نقشه تعاملی کشورها",
     description: "بررسی کشورهای مهاجرپذیر با اطلاعات کامل و به‌روز",
     icon: Map,
+    link: "#countries",
   },
   {
     title: "مشاوره رایگان",
     description: "مشاوره تخصصی رایگان با کارشناسان مجرب",
     icon: Headphones,
+    link: "#contact",
   },
   {
     title: "پیگیری آنلاین",
     description: "پیگیری وضعیت پرونده از طریق پنل کاربری",
     icon: BarChart3,
+    link: "#statistics",
   },
   {
     title: "تیم متخصص",
     description: "بیش از 35 کارشناس و مشاور مجرب",
     icon: Users,
+    link: "#contact",
   },
   {
     title: "امنیت بالا",
     description: "حفاظت کامل از اطلاعات شخصی شما",
     icon: Shield,
+    link: "#newsletter",
   },
   {
     title: "پردازش سریع",
     description: "پردازش سریع و دقیق پرونده‌ها",
     icon: Zap,
+    link: "#services",
   },
   {
     title: "پشتیبانی 24/7",
     description: "پشتیبانی مداوم در تمام مراحل",
     icon: Clock,
+    link: "#contact",
   },
 ]
+
+// تابع برای اسکرول نرم به بخش مورد نظر
+const scrollToSection = (sectionId: string) => {
+  const element = document.getElementById(sectionId.replace("#", ""))
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth", block: "start" })
+  }
+}
 
 export default function DiacoHomePage() {
   return (
@@ -211,7 +239,12 @@ export default function DiacoHomePage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {smartFeatures.map((feature, index) => (
               <ScrollReveal key={index} direction="up" delay={index * 0.1}>
-                <motion.div className="text-center" whileHover={{ y: -10 }} transition={{ duration: 0.3 }}>
+                <motion.div
+                  className="text-center cursor-pointer"
+                  whileHover={{ y: -10 }}
+                  transition={{ duration: 0.3 }}
+                  onClick={() => scrollToSection(feature.link)}
+                >
                   <div
                     className={`w-16 h-16 ${feature.color} rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg`}
                   >
@@ -298,7 +331,11 @@ export default function DiacoHomePage() {
                       </div>
 
                       <motion.div whileHover={{ x: 5 }} transition={{ duration: 0.2 }}>
-                        <Button variant="link" className="mt-4 p-0 h-auto text-blue-600 w-full justify-start">
+                        <Button
+                          variant="link"
+                          className="mt-4 p-0 h-auto text-blue-600 w-full justify-start"
+                          onClick={() => scrollToSection(service.link)}
+                        >
                           اطلاعات بیشتر
                           <motion.div
                             animate={{ x: [0, 5, 0] }}
@@ -353,6 +390,22 @@ export default function DiacoHomePage() {
           </ScrollReveal>
         </div>
       </ParallaxSection>
+
+      {/* FAQ Section */}
+      <section className="py-20 bg-white" id="faq">
+        <div className="container mx-auto px-4">
+          <ScrollReveal direction="up">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">سوالات متداول</h2>
+              <p className="text-xl text-gray-600">پاسخ سوالات رایج درباره روش‌های مختلف مهاجرت</p>
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal direction="up" delay={0.2}>
+            <MigrationMethodsFAQ />
+          </ScrollReveal>
+        </div>
+      </section>
 
       {/* Podcast Section */}
       <PodcastSection />
@@ -417,7 +470,12 @@ export default function DiacoHomePage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
               <ScrollReveal key={index} direction="up" delay={index * 0.1}>
-                <motion.div className="text-center" whileHover={{ y: -10, scale: 1.05 }} transition={{ duration: 0.3 }}>
+                <motion.div
+                  className="text-center cursor-pointer"
+                  whileHover={{ y: -10, scale: 1.05 }}
+                  transition={{ duration: 0.3 }}
+                  onClick={() => scrollToSection(feature.link)}
+                >
                   <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                     <feature.icon className="w-8 h-8 text-white" />
                   </div>
@@ -431,13 +489,10 @@ export default function DiacoHomePage() {
       </ParallaxSection>
 
       {/* Newsletter Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white" id="newsletter">
         <div className="container mx-auto px-4">
           <ScrollReveal direction="up">
-            <div
-              id="newsletter"
-              className="bg-gradient-to-br from-blue-700 to-blue-800 text-white rounded-2xl p-8 md:p-12 shadow-2xl"
-            >
+            <div className="bg-gradient-to-br from-blue-700 to-blue-800 text-white rounded-2xl p-8 md:p-12 shadow-2xl">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 <motion.div
                   initial={{ opacity: 0, x: -50 }}
@@ -543,14 +598,15 @@ export default function DiacoHomePage() {
               { phone: "09306229790", icon: Phone },
             ].map((contact, index) => (
               <ScrollReveal key={index} direction="up" delay={index * 0.1}>
-                <motion.div
-                  className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center border border-white/20"
+                <motion.a
+                  href={`tel:${contact.phone}`}
+                  className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center border border-white/20 block"
                   whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.15)" }}
                   transition={{ duration: 0.3 }}
                 >
                   <contact.icon className="w-8 h-8 mx-auto mb-3 text-yellow-300" />
                   <div className="text-lg font-semibold">{contact.phone}</div>
-                </motion.div>
+                </motion.a>
               </ScrollReveal>
             ))}
           </div>
@@ -570,14 +626,15 @@ export default function DiacoHomePage() {
 
               <div className="flex flex-wrap justify-center gap-4">
                 {[
-                  { icon: MessageSquare, label: "تلگرام" },
-                  { icon: Video, label: "اینستاگرام" },
-                  { icon: Globe, label: "لینکدین" },
+                  { icon: MessageSquare, label: "تلگرام", link: "#contact" },
+                  { icon: Video, label: "اینستاگرام", link: "#contact" },
+                  { icon: Globe, label: "لینکدین", link: "#contact" },
                 ].map((social, index) => (
                   <motion.div key={social.label} whileHover={{ scale: 1.1, y: -5 }} whileTap={{ scale: 0.95 }}>
                     <Button
                       variant="outline"
                       className="text-white border-white hover:bg-white hover:text-blue-600 transition-all duration-300"
+                      onClick={() => scrollToSection(social.link)}
                     >
                       <social.icon className="w-4 h-4 ml-2" />
                       {social.label}
@@ -614,15 +671,30 @@ export default function DiacoHomePage() {
             {[
               {
                 title: "خدمات",
-                links: ["مهاجرت تحصیلی", "مهاجرت کاری", "مهاجرت سرمایه‌گذاری", "آوسبیلدونگ آلمان"],
+                links: [
+                  { name: "مهاجرت تحصیلی", link: "#services" },
+                  { name: "مهاجرت کاری", link: "#wizard" },
+                  { name: "مهاجرت سرمایه‌گذاری", link: "#countries" },
+                  { name: "آوسبیلدونگ آلمان", link: "#smart-features" },
+                ],
               },
               {
                 title: "ابزارهای هوشمند",
-                links: ["ویزارد انتخاب روش", "مقایسه روش‌ها", "محاسبه‌گر هزینه", "نقشه تعاملی"],
+                links: [
+                  { name: "ویزارد انتخاب روش", link: "#wizard" },
+                  { name: "مقایسه روش‌ها", link: "#statistics" },
+                  { name: "محاسبه‌گر هزینه", link: "#countries" },
+                  { name: "نقشه تعاملی", link: "#countries" },
+                ],
               },
               {
                 title: "تماس با ما",
-                links: ["021-8807-3287", "info@diaco.eu", "تهران، شهرک غرب"],
+                links: [
+                  { name: "021-8807-3287", link: "tel:02188073287" },
+                  { name: "info@diaco.eu", link: "mailto:info@diaco.eu" },
+                  { name: "تهران، شهرک غرب", link: "#contact" },
+                  { name: "سوالات متداول", link: "#faq" },
+                ],
               },
             ].map((section, index) => (
               <ScrollReveal key={section.title} direction="up" delay={index * 0.1}>
@@ -631,9 +703,18 @@ export default function DiacoHomePage() {
                   <ul className="space-y-2 text-sm text-gray-400">
                     {section.links.map((link, linkIndex) => (
                       <motion.li key={linkIndex} whileHover={{ x: 5, color: "#ffffff" }} transition={{ duration: 0.2 }}>
-                        <Link href="#" className="hover:text-white transition-colors">
-                          {link}
-                        </Link>
+                        <button
+                          onClick={() => {
+                            if (link.link.startsWith("tel:") || link.link.startsWith("mailto:")) {
+                              window.location.href = link.link
+                            } else {
+                              scrollToSection(link.link)
+                            }
+                          }}
+                          className="hover:text-white transition-colors text-left"
+                        >
+                          {link.name}
+                        </button>
                       </motion.li>
                     ))}
                   </ul>
