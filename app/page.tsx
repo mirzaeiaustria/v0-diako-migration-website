@@ -35,6 +35,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+import { InteractiveBanner } from "@/components/interactive-banner"
 
 const services = [
   {
@@ -183,17 +184,8 @@ const features = [
 export default function DiacoHomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50" dir="rtl">
-      {/* Professional Banner */}
-      <section className="w-full">
-        <div className="relative w-full h-[200px] md:h-[300px] lg:h-[400px] overflow-hidden">
-          <img
-            src="/images/diaco-banner.jpg"
-            alt="هلدینگ مهاجرتی دیاکو - با بیش از 20 سال تجربه موفق"
-            className="w-full h-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-black/10"></div>
-        </div>
-      </section>
+      {/* Interactive Professional Banner */}
+      <InteractiveBanner />
 
       {/* Enhanced Hero Section */}
       <EnhancedHeroSection />
