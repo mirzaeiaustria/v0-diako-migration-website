@@ -10,6 +10,7 @@ import { MigrantExperiences } from "@/components/migrant-experiences"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import { ParallaxSection } from "@/components/ui/parallax-section"
 import { motion } from "framer-motion"
+import { AdvancedAIToolsSection } from "@/components/advanced-ai-tools-section"
 import {
   Phone,
   Globe,
@@ -219,6 +220,9 @@ export default function DiacoHomePage() {
           </div>
         </div>
       </section>
+
+      {/* Advanced AI Tools Section */}
+      <AdvancedAIToolsSection />
 
       {/* Services Section */}
       <ParallaxSection className="py-20 bg-gradient-to-br from-blue-50 to-teal-50" id="services">
