@@ -1,12 +1,10 @@
 "use client"
 
 import { EnhancedHeroSection } from "@/components/enhanced-hero-section"
-import { MigrationMethodsSection } from "@/components/migration-methods-section"
 import { AdvancedMigrationWizard } from "@/components/advanced-migration-wizard"
 import { InteractiveWorldMap } from "@/components/interactive-world-map"
 import { MigrationStatistics } from "@/components/migration-statistics"
 import { MigrationSuccessStories } from "@/components/migration-success-stories"
-import { MigrantExperiences } from "@/components/migrant-experiences"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import { ParallaxSection } from "@/components/ui/parallax-section"
 import { motion } from "framer-motion"
@@ -14,8 +12,6 @@ import { PodcastSection } from "@/components/podcast-section"
 import { MobileAppSection } from "@/components/mobile-app-section"
 import { YoutubeSection } from "@/components/youtube-section"
 import { RealTimeChat } from "@/components/real-time-chat"
-import { WhyChooseDiako } from "@/components/why-choose-diako"
-import { MigrationMethodsFAQ } from "@/components/migration-methods-faq"
 import {
   Phone,
   Globe,
@@ -42,12 +38,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { InteractiveBanner } from "@/components/interactive-banner"
-import { AISmartRecommendations } from "@/components/ai-smart-recommendations"
 import { CostCalculator } from "@/components/cost-calculator"
-import { DocumentReview } from "@/components/document-review"
-import { IntelligentAssistant } from "@/components/intelligent-assistant"
 import { ImmigrantAssociation } from "@/components/immigrant-association"
-import { TimePlanner } from "@/components/time-planner"
+import { DynamicNavigation } from "@/components/dynamic-navigation"
 
 const services = [
   {
@@ -60,7 +53,7 @@ const services = [
     color: "bg-blue-500",
     successRate: "85%",
     avgTime: "4-8 ماه",
-    link: "#services",
+    link: "/services/education",
   },
   {
     id: "work",
@@ -72,7 +65,7 @@ const services = [
     color: "bg-green-500",
     successRate: "78%",
     avgTime: "6-12 ماه",
-    link: "#wizard",
+    link: "/services/work",
   },
   {
     id: "investment",
@@ -84,7 +77,7 @@ const services = [
     color: "bg-purple-500",
     successRate: "92%",
     avgTime: "3-6 ماه",
-    link: "#countries",
+    link: "/services/investment",
   },
   {
     id: "family",
@@ -96,7 +89,7 @@ const services = [
     color: "bg-orange-500",
     successRate: "88%",
     avgTime: "8-18 ماه",
-    link: "#statistics",
+    link: "/services/family",
   },
   {
     id: "ausbildung",
@@ -108,7 +101,7 @@ const services = [
     color: "bg-red-500",
     successRate: "95%",
     avgTime: "2-4 ماه",
-    link: "#smart-features",
+    link: "/services/ausbildung",
   },
   {
     id: "language",
@@ -120,7 +113,7 @@ const services = [
     color: "bg-teal-500",
     successRate: "90%",
     avgTime: "3-6 ماه",
-    link: "#newsletter",
+    link: "/services/language",
   },
 ]
 
@@ -130,28 +123,28 @@ const smartFeatures = [
     description: "تحلیل دقیق پروفایل شما و پیشنهاد بهترین مسیرهای مهاجرت",
     icon: Brain,
     color: "bg-blue-500",
-    link: "#wizard",
+    link: "/tools/ai-recommendations",
   },
   {
     title: "مقایسه پیشرفته روش‌ها",
     description: "مقایسه جامع روش‌های مختلف مهاجرت بر اساس معیارهای متنوع",
     icon: BarChart3,
     color: "bg-green-500",
-    link: "#statistics",
+    link: "/tools/comparison",
   },
   {
     title: "محاسبه‌گر هزینه",
     description: "برآورد دقیق هزینه‌های مهاجرت و زندگی در کشور مقصد",
     icon: Calculator,
     color: "bg-purple-500",
-    link: "#countries",
+    link: "/tools/cost-calculator",
   },
   {
     title: "تقویم مهاجرتی شخصی",
     description: "برنامه‌ریزی زمانی دقیق برای تمام مراحل مهاجرت",
     icon: Clock,
     color: "bg-orange-500",
-    link: "#contact",
+    link: "/tools/timeline-planner",
   },
 ]
 
@@ -160,7 +153,7 @@ const features = [
     title: "هوش مصنوعی پیشرفته",
     description: "سامانه هوشمند تحلیل شرایط و پیشنهاد بهترین مسیر مهاجرت",
     icon: Brain,
-    link: "#smart-features",
+    link: "/tools/ai-assistant",
   },
   {
     title: "ویزارد انتخاب روش",
@@ -223,6 +216,9 @@ const scrollToSection = (sectionId: string) => {
 export default function DiacoHomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50" dir="rtl">
+      {/* Dynamic Navigation */}
+      <DynamicNavigation />
+
       {/* Interactive Professional Banner */}
       <InteractiveBanner />
 
@@ -248,34 +244,20 @@ export default function DiacoHomePage() {
                   className="text-center cursor-pointer"
                   whileHover={{ y: -10 }}
                   transition={{ duration: 0.3 }}
-                  onClick={() => scrollToSection(feature.link)}
                 >
-                  <div
-                    className={`w-16 h-16 ${feature.color} rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg`}
-                  >
-                    <feature.icon className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{feature.title}</h3>
-                  <p className="text-gray-600">{feature.description}</p>
+                  <Link href={feature.link}>
+                    <div
+                      className={`w-16 h-16 ${feature.color} rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg`}
+                    >
+                      <feature.icon className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">{feature.title}</h3>
+                    <p className="text-gray-600">{feature.description}</p>
+                  </Link>
                 </motion.div>
               </ScrollReveal>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* AI Smart Recommendations Section */}
-      <section className="py-20 bg-white" id="ai-recommendations">
-        <div className="container mx-auto px-4">
-          <ScrollReveal direction="up">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">توصیه‌های هوشمند AI</h2>
-              <p className="text-xl text-gray-600">دریافت توصیه‌های شخصی‌سازی شده بر اساس پروفایل شما</p>
-            </div>
-          </ScrollReveal>
-          <ScrollReveal direction="up" delay={0.2}>
-            <AISmartRecommendations />
-          </ScrollReveal>
         </div>
       </section>
 
@@ -294,38 +276,6 @@ export default function DiacoHomePage() {
         </div>
       </section>
 
-      {/* Document Review Section */}
-      <section className="py-20 bg-white" id="document-review">
-        <div className="container mx-auto px-4">
-          <ScrollReveal direction="up">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">بررسی و چک‌لیست مدارک</h2>
-              <p className="text-xl text-gray-600">چک‌لیست کامل مدارک مورد نیاز برای هر کشور و نوع ویزا</p>
-            </div>
-          </ScrollReveal>
-          <ScrollReveal direction="up" delay={0.2}>
-            <DocumentReview />
-          </ScrollReveal>
-        </div>
-      </section>
-
-      {/* Intelligent Assistant Section */}
-      <section className="py-20 bg-gradient-to-br from-purple-50 to-blue-50" id="intelligent-assistant">
-        <div className="container mx-auto px-4">
-          <ScrollReveal direction="up">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">دستیار هوشمند مهاجرتی</h2>
-              <p className="text-xl text-gray-600">پاسخ فوری به سؤالات مهاجرتی با استفاده از هوش مصنوعی</p>
-            </div>
-          </ScrollReveal>
-          <ScrollReveal direction="up" delay={0.2}>
-            <div className="max-w-4xl mx-auto">
-              <IntelligentAssistant />
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
-
       {/* Immigrant Association Section */}
       <section className="py-20 bg-white" id="immigrant-association">
         <div className="container mx-auto px-4">
@@ -340,24 +290,6 @@ export default function DiacoHomePage() {
           </ScrollReveal>
         </div>
       </section>
-
-      {/* Time Planner Section */}
-      <section className="py-20 bg-gradient-to-br from-indigo-50 to-purple-50" id="time-planner">
-        <div className="container mx-auto px-4">
-          <ScrollReveal direction="up">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">برنامه‌ریز زمانی مهاجرت</h2>
-              <p className="text-xl text-gray-600">برنامه‌ریزی مرحله‌ای فرآیند مهاجرت با تایم‌لاین دقیق</p>
-            </div>
-          </ScrollReveal>
-          <ScrollReveal direction="up" delay={0.2}>
-            <TimePlanner />
-          </ScrollReveal>
-        </div>
-      </section>
-
-      {/* Why Choose Diako Section */}
-      <WhyChooseDiako />
 
       {/* Services Section */}
       <ParallaxSection className="py-20 bg-gradient-to-br from-blue-50 to-teal-50" id="services">
@@ -425,15 +357,7 @@ export default function DiacoHomePage() {
                       </div>
 
                       <motion.div whileHover={{ x: 5 }} transition={{ duration: 0.2 }}>
-                        <Link
-                          href={
-                            service.id === "education"
-                              ? "/immigration-methods/study"
-                              : service.id === "work"
-                                ? "/immigration-methods/work"
-                                : service.link
-                          }
-                        >
+                        <Link href={service.link}>
                           <Button variant="link" className="mt-4 p-0 h-auto text-blue-600 w-full justify-start">
                             اطلاعات بیشتر
                             <motion.div
@@ -453,9 +377,6 @@ export default function DiacoHomePage() {
           </div>
         </div>
       </ParallaxSection>
-
-      {/* Migration Methods Section */}
-      <MigrationMethodsSection />
 
       {/* Migration Wizard Section */}
       <section className="py-20 bg-white" id="wizard">
@@ -490,22 +411,6 @@ export default function DiacoHomePage() {
           </ScrollReveal>
         </div>
       </ParallaxSection>
-
-      {/* FAQ Section */}
-      <section className="py-20 bg-white" id="faq">
-        <div className="container mx-auto px-4">
-          <ScrollReveal direction="up">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">سوالات متداول</h2>
-              <p className="text-xl text-gray-600">پاسخ سوالات رایج درباره روش‌های مختلف مهاجرت</p>
-            </div>
-          </ScrollReveal>
-
-          <ScrollReveal direction="up" delay={0.2}>
-            <MigrationMethodsFAQ />
-          </ScrollReveal>
-        </div>
-      </section>
 
       {/* Podcast Section */}
       <PodcastSection />
@@ -548,22 +453,13 @@ export default function DiacoHomePage() {
         </div>
       </ParallaxSection>
 
-      {/* Migrant Experiences Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <ScrollReveal direction="up">
-            <MigrantExperiences />
-          </ScrollReveal>
-        </div>
-      </section>
-
       {/* Features Section */}
       <ParallaxSection className="py-20 bg-gradient-to-br from-blue-50 to-teal-50">
         <div className="container mx-auto px-4">
           <ScrollReveal direction="up">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">چرا دیاکو؟</h2>
-              <p className="text-xl text-gray-600">مزایای همکاری با هلدینگ مهاجرتی دیاکو</p>
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">ابزارهای هوشمند دیاکو</h2>
+              <p className="text-xl text-gray-600">مجموعه کاملی از ابزارهای پیشرفته برای تسهیل فرآیند مهاجرت</p>
             </div>
           </ScrollReveal>
 
@@ -574,7 +470,13 @@ export default function DiacoHomePage() {
                   className="text-center cursor-pointer"
                   whileHover={{ y: -10, scale: 1.05 }}
                   transition={{ duration: 0.3 }}
-                  onClick={() => scrollToSection(feature.link)}
+                  onClick={() => {
+                    if (feature.link.startsWith("#")) {
+                      scrollToSection(feature.link)
+                    } else {
+                      window.location.href = feature.link
+                    }
+                  }}
                 >
                   <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                     <feature.icon className="w-8 h-8 text-white" />
@@ -772,18 +674,18 @@ export default function DiacoHomePage() {
               {
                 title: "خدمات",
                 links: [
-                  { name: "مهاجرت تحصیلی", link: "#services" },
-                  { name: "مهاجرت کاری", link: "#wizard" },
-                  { name: "مهاجرت سرمایه‌گذاری", link: "#countries" },
-                  { name: "آوسبیلدونگ آلمان", link: "#smart-features" },
+                  { name: "مهاجرت تحصیلی", link: "/services/education" },
+                  { name: "مهاجرت کاری", link: "/services/work" },
+                  { name: "مهاجرت سرمایه‌گذاری", link: "/services/investment" },
+                  { name: "آوسبیلدونگ آلمان", link: "/services/ausbildung" },
                 ],
               },
               {
                 title: "ابزارهای هوشمند",
                 links: [
                   { name: "ویزارد انتخاب روش", link: "#wizard" },
-                  { name: "مقایسه روش‌ها", link: "#statistics" },
-                  { name: "محاسبه‌گر هزینه", link: "#countries" },
+                  { name: "مقایسه روش‌ها", link: "/tools/comparison" },
+                  { name: "محاسبه‌گر هزینه", link: "/tools/cost-calculator" },
                   { name: "نقشه تعاملی", link: "#countries" },
                 ],
               },
@@ -793,7 +695,7 @@ export default function DiacoHomePage() {
                   { name: "021-8807-3287", link: "tel:02188073287" },
                   { name: "info@diaco.eu", link: "mailto:info@diaco.eu" },
                   { name: "تهران، شهرک غرب", link: "#contact" },
-                  { name: "سوالات متداول", link: "#faq" },
+                  { name: "سوالات متداول", link: "/faq" },
                 ],
               },
             ].map((section, index) => (
@@ -803,18 +705,9 @@ export default function DiacoHomePage() {
                   <ul className="space-y-2 text-sm text-gray-400">
                     {section.links.map((link, linkIndex) => (
                       <motion.li key={linkIndex} whileHover={{ x: 5, color: "#ffffff" }} transition={{ duration: 0.2 }}>
-                        <button
-                          onClick={() => {
-                            if (link.link.startsWith("tel:") || link.link.startsWith("mailto:")) {
-                              window.location.href = link.link
-                            } else {
-                              scrollToSection(link.link)
-                            }
-                          }}
-                          className="hover:text-white transition-colors text-left"
-                        >
+                        <Link href={link.link} className="hover:text-white transition-colors">
                           {link.name}
-                        </button>
+                        </Link>
                       </motion.li>
                     ))}
                   </ul>
