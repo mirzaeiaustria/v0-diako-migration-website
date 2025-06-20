@@ -10,7 +10,6 @@ import { MigrantExperiences } from "@/components/migrant-experiences"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import { ParallaxSection } from "@/components/ui/parallax-section"
 import { motion } from "framer-motion"
-import { AdvancedAIToolsSection } from "@/components/advanced-ai-tools-section"
 import { PodcastSection } from "@/components/podcast-section"
 import { MobileAppSection } from "@/components/mobile-app-section"
 import { YoutubeSection } from "@/components/youtube-section"
@@ -43,6 +42,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { InteractiveBanner } from "@/components/interactive-banner"
+import { AISmartRecommendations } from "@/components/ai-smart-recommendations"
+import { CostCalculator } from "@/components/cost-calculator"
+import { DocumentReview } from "@/components/document-review"
+import { IntelligentAssistant } from "@/components/intelligent-assistant"
+import { ImmigrantAssociation } from "@/components/immigrant-association"
+import { TimePlanner } from "@/components/time-planner"
 
 const services = [
   {
@@ -259,8 +264,97 @@ export default function DiacoHomePage() {
         </div>
       </section>
 
-      {/* Advanced AI Tools Section */}
-      <AdvancedAIToolsSection />
+      {/* AI Smart Recommendations Section */}
+      <section className="py-20 bg-white" id="ai-recommendations">
+        <div className="container mx-auto px-4">
+          <ScrollReveal direction="up">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">توصیه‌های هوشمند AI</h2>
+              <p className="text-xl text-gray-600">دریافت توصیه‌های شخصی‌سازی شده بر اساس پروفایل شما</p>
+            </div>
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={0.2}>
+            <AISmartRecommendations />
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* Cost Calculator Section */}
+      <section className="py-20 bg-gradient-to-br from-green-50 to-blue-50" id="cost-calculator">
+        <div className="container mx-auto px-4">
+          <ScrollReveal direction="up">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">محاسبه‌گر هزینه مهاجرت</h2>
+              <p className="text-xl text-gray-600">محاسبه دقیق هزینه‌های مهاجرت و زندگی در کشور مقصد</p>
+            </div>
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={0.2}>
+            <CostCalculator />
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* Document Review Section */}
+      <section className="py-20 bg-white" id="document-review">
+        <div className="container mx-auto px-4">
+          <ScrollReveal direction="up">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">بررسی و چک‌لیست مدارک</h2>
+              <p className="text-xl text-gray-600">چک‌لیست کامل مدارک مورد نیاز برای هر کشور و نوع ویزا</p>
+            </div>
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={0.2}>
+            <DocumentReview />
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* Intelligent Assistant Section */}
+      <section className="py-20 bg-gradient-to-br from-purple-50 to-blue-50" id="intelligent-assistant">
+        <div className="container mx-auto px-4">
+          <ScrollReveal direction="up">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">دستیار هوشمند مهاجرتی</h2>
+              <p className="text-xl text-gray-600">پاسخ فوری به سؤالات مهاجرتی با استفاده از هوش مصنوعی</p>
+            </div>
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={0.2}>
+            <div className="max-w-4xl mx-auto">
+              <IntelligentAssistant />
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* Immigrant Association Section */}
+      <section className="py-20 bg-white" id="immigrant-association">
+        <div className="container mx-auto px-4">
+          <ScrollReveal direction="up">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">انجمن مهاجران</h2>
+              <p className="text-xl text-gray-600">اشتراک تجربیات و ارتباط با سایر متقاضیان مهاجرت</p>
+            </div>
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={0.2}>
+            <ImmigrantAssociation />
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* Time Planner Section */}
+      <section className="py-20 bg-gradient-to-br from-indigo-50 to-purple-50" id="time-planner">
+        <div className="container mx-auto px-4">
+          <ScrollReveal direction="up">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">برنامه‌ریز زمانی مهاجرت</h2>
+              <p className="text-xl text-gray-600">برنامه‌ریزی مرحله‌ای فرآیند مهاجرت با تایم‌لاین دقیق</p>
+            </div>
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={0.2}>
+            <TimePlanner />
+          </ScrollReveal>
+        </div>
+      </section>
 
       {/* Why Choose Diako Section */}
       <WhyChooseDiako />
@@ -331,19 +425,25 @@ export default function DiacoHomePage() {
                       </div>
 
                       <motion.div whileHover={{ x: 5 }} transition={{ duration: 0.2 }}>
-                        <Button
-                          variant="link"
-                          className="mt-4 p-0 h-auto text-blue-600 w-full justify-start"
-                          onClick={() => scrollToSection(service.link)}
+                        <Link
+                          href={
+                            service.id === "education"
+                              ? "/immigration-methods/study"
+                              : service.id === "work"
+                                ? "/immigration-methods/work"
+                                : service.link
+                          }
                         >
-                          اطلاعات بیشتر
-                          <motion.div
-                            animate={{ x: [0, 5, 0] }}
-                            transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}
-                          >
-                            <ArrowRight className="w-4 h-4 mr-1" />
-                          </motion.div>
-                        </Button>
+                          <Button variant="link" className="mt-4 p-0 h-auto text-blue-600 w-full justify-start">
+                            اطلاعات بیشتر
+                            <motion.div
+                              animate={{ x: [0, 5, 0] }}
+                              transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}
+                            >
+                              <ArrowRight className="w-4 h-4 mr-1" />
+                            </motion.div>
+                          </Button>
+                        </Link>
                       </motion.div>
                     </CardContent>
                   </Card>
