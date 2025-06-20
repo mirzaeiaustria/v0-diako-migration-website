@@ -14,6 +14,7 @@ import {
   AlertCircle,
   XCircle,
   Upload,
+  Download,
   Search,
   Eye,
   Clock,
@@ -22,7 +23,9 @@ import {
   Shield,
   Brain,
   Camera,
+  Scan,
   FileCheck,
+  AlertTriangle,
 } from "lucide-react"
 
 interface Document {
@@ -158,21 +161,21 @@ const documentCategories: DocumentCategory[] = [
 
 export function EnhancedDocumentChecker() {
   const [categories, setCategories] = useState<DocumentCategory[]>(documentCategories)
-  const [selectedCategory, setSelectedCategory] = useState<string>('identity')
+  const [selectedCategory, setSelectedCategory] = useState<string>("identity")
   const [selectedDoc, setSelectedDoc] = useState<string | null>(null)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [filterStatus, setFilterStatus] = useState<string>('all')
+  const [searchTerm, setSearchTerm] = useState("")
+  const [filterStatus, setFilterStatus] = useState<string>("all")
   const [uploadProgress, setUploadProgress] = useState<Record<string, number>>({})
   const [aiAnalysis, setAiAnalysis] = useState<Record<string, any>>({})
 
   // Calculate completion rates
   useEffect(() => {
-    const updatedCategories = categories.map(category => {
+    const updatedCategories = categories.map((category) => {
       const totalDocs = category.documents.length
-      const completedDocs = category.documents.filter(doc => doc.status === 'complete').length
+      const completedDocs = category.documents.filter((doc) => doc.status === "complete").length
       return {
         ...category,
-        completionRate: Math.round((completedDocs / totalDocs) * 100)
+        completionRate: Math.round((completedDocs / totalDocs) * 100),
       }
     })
     setCategories(updatedCategories)
@@ -214,83 +217,89 @@ export function EnhancedDocumentChecker() {
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case "complete": return "تکمیل شده"
-      case "review": return "در حال بررسی"
-      case "incomplete": return "ناقص"
-      case "expired": return "منقضی شده"
-      case "missing": return "موجود نیست"
-      default: return "نامشخص"
+      case "complete":
+        return "تکمیل شده"
+      case "review":
+        return "در حال بررسی"
+      case "incomplete":
+        return "ناقص"
+      case "expired":
+        return "منقضی شده"
+      case "missing":
+        return "موجود نیست"
+      default:
+        return "نامشخص"
     }
   }
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "high": return "text-red-600"
-      case "medium": return "text-yellow-600"
-      case "low": return "text-green-600"
-      default: return "text-gray-600"
+      case "high":
+        return "text-red-600"
+      case "medium":
+        return "text-yellow-600"
+      case "low":
+        return "text-green-600"
+      default:
+        return "text-gray-600"
     }
   }
 
   const handleFileUpload = async (docId: string, files: FileList | null) => {
     if (!files) return
 
-    setUploadProgress(prev => ({ ...prev, [docId]: 0 }))
+    setUploadProgress((prev) => ({ ...prev, [docId]: 0 }))
 
     // Simulate upload progress
     for (let i = 0; i <= 100; i += 10) {
-      setUploadProgress(prev => ({ ...prev, [docId]: i }))
-      await new Promise(resolve => setTimeout(resolve, 100))
+      setUploadProgress((prev) => ({ ...prev, [docId]: i }))
+      await new Promise((resolve) => setTimeout(resolve, 100))
     }
 
     // Simulate AI analysis
     setTimeout(() => {
-      setAiAnalysis(prev => ({
+      setAiAnalysis((prev) => ({
         ...prev,
         [docId]: {
           quality: Math.floor(Math.random() * 30) + 70,
           completeness: Math.floor(Math.random() * 20) + 80,
           suggestions: [
-            'کیفیت تصویر مناسب است',
-            'تمام اطلاعات قابل خواندن هستند',
-            'توصیه می‌شود نسخه اصلی نیز ارائه شود'
-          ]
-        }
+            "کیفیت تصویر مناسب است",
+            "تمام اطلاعات قابل خواندن هستند",
+            "توصیه می‌شود نسخه اصلی نیز ارائه شود",
+          ],
+        },
       }))
     }, 1500)
   }
 
-  const filteredDocuments = categories
-    .find(cat => cat.id === selectedCategory)
-    ?.documents.filter(doc => {
-      const matchesSearch = doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           doc.description.toLowerCase().includes(searchTerm.toLowerCase())
-      const matchesFilter = filterStatus === 'all' || doc.status === filterStatus
-      return matchesSearch && matchesFilter
-    }) || []
+  const filteredDocuments =
+    categories
+      .find((cat) => cat.id === selectedCategory)
+      ?.documents.filter((doc) => {
+        const matchesSearch =
+          doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          doc.description.toLowerCase().includes(searchTerm.toLowerCase())
+        const matchesFilter = filterStatus === "all" || doc.status === filterStatus
+        return matchesSearch && matchesFilter
+      }) || []
 
-  const overallProgress = Math.round(
-    categories.reduce((sum, cat) => sum + cat.completionRate, 0) / categories.length
-  )
+  const overallProgress = Math.round(categories.reduce((sum, cat) => sum + cat.completionRate, 0) / categories.length)
 
   return (
     <div className="space-y-8">
       {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center"
-      >
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center">
         <div className="flex items-center justify-center gap-3 mb-4">
           <motion.div
-            animate={{ 
+            animate={{
               scale: [1, 1.1, 1],
-              rotate: [0, 5, -5, 0]
+              rotate: [0, 5, -5, 0],
             }}
-            transition={{ 
-              duration: 2, 
+            transition={{
+              duration: 2,
               repeat: Number.POSITIVE_INFINITY,
-              ease: "easeInOut"
+              ease: "easeInOut",
             }}
             className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center"
           >
@@ -324,9 +333,9 @@ export function EnhancedDocumentChecker() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.1 }}
                 className={`p-3 rounded-lg border cursor-pointer transition-all ${
-                  selectedCategory === category.id 
-                    ? 'bg-blue-100 border-blue-300' 
-                    : 'bg-white border-gray-200 hover:border-blue-200'
+                  selectedCategory === category.id
+                    ? "bg-blue-100 border-blue-300"
+                    : "bg-white border-gray-200 hover:border-blue-200"
                 }`}
                 onClick={() => setSelectedCategory(category.id)}
               >
@@ -352,10 +361,9 @@ export function EnhancedDocumentChecker() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center gap-2">
-                  {categories.find(cat => cat.id === selectedCategory)?.icon && (
-                    <categories.find(cat => cat.id === selectedCategory)!.icon className="w-6 h-6" />
-                  )}
-                  {categories.find(cat => cat.id === selectedCategory)?.name}
+                  {categories.find((cat) => cat.id === selectedCategory)?.icon &&
+                    (<categories.find(cat => cat.id === selectedCategory)!.icon className="w-6 h-6" />)}
+                  {categories.find((cat) => cat.id === selectedCategory)?.name}
                 </CardTitle>
                 <div className="flex gap-2">
                   <div className="relative">
@@ -372,11 +380,10 @@ export function EnhancedDocumentChecker() {
                     onChange={(e) => setFilterStatus(e.target.value)}
                     className="px-3 py-2 border rounded-md text-sm"
                   >
-                    <option value="all\">همه</option>\
-                    <option value="complete">تکمیل شده</option>
+                    <option value="all\">همه</option>\<option value="complete">تکمیل شده</option>
                     <option value="incomplete">ناقص</option>
                     <option value="missing">موجود نیست</option>
-                    <option value="expired">منقضی</option>
+                    <option value="expired">منقضی شده</option>
                   </select>
                 </div>
               </div>
@@ -391,8 +398,8 @@ export function EnhancedDocumentChecker() {
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ delay: index * 0.1 }}
                     className={`border rounded-lg p-4 cursor-pointer transition-all ${
-                      selectedDoc === doc.id 
-                        ? "border-blue-500 bg-blue-50" 
+                      selectedDoc === doc.id
+                        ? "border-blue-500 bg-blue-50"
                         : "border-gray-200 hover:border-blue-300 hover:shadow-md"
                     }`}
                     onClick={() => setSelectedDoc(selectedDoc === doc.id ? null : doc.id)}
@@ -406,11 +413,7 @@ export function EnhancedDocumentChecker() {
                             <Star className={`w-4 h-4 ${getPriorityColor(doc.priority)}`} />
                           </div>
                           <p className="text-sm text-gray-600">{doc.description}</p>
-                          {doc.deadline && (
-                            <p className="text-xs text-red-600 mt-1">
-                              مهلت: {doc.deadline}
-                            </p>
-                          )}
+                          {doc.deadline && <p className="text-xs text-red-600 mt-1">مهلت: {doc.deadline}</p>}
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
@@ -419,9 +422,7 @@ export function EnhancedDocumentChecker() {
                             AI: {doc.aiScore}%
                           </Badge>
                         )}
-                        <Badge className={getStatusColor(doc.status)}>
-                          {getStatusText(doc.status)}
-                        </Badge>
+                        <Badge className={getStatusColor(doc.status)}>{getStatusText(doc.status)}</Badge>
                       </div>
                     </div>
 
@@ -468,9 +469,7 @@ export function EnhancedDocumentChecker() {
                             <TabsContent value="upload" className="space-y-4">
                               <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
                                 <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                                <p className="text-sm text-gray-600 mb-2">
-                                  فایل‌های خود را اینجا بکشید یا کلیک کنید
-                                </p>
+                                <p className="text-sm text-gray-600 mb-2">فایل‌های خود را اینجا بکشید یا کلیک کنید</p>
                                 <input
                                   type="file"
                                   multiple
@@ -503,4 +502,131 @@ export function EnhancedDocumentChecker() {
                                 <div className="space-y-4">
                                   <div className="grid grid-cols-2 gap-4">
                                     <div className="bg-green-50 p-3 rounded-lg">
-                                      <div className\
+                                      <div className="text-sm text-gray-600">کیفیت</div>
+                                      <div className="text-2xl font-bold text-green-600">
+                                        {aiAnalysis[doc.id].quality}%
+                                      </div>
+                                    </div>
+                                    <div className="bg-blue-50 p-3 rounded-lg">
+                                      <div className="text-sm text-gray-600">تکمیل</div>
+                                      <div className="text-2xl font-bold text-blue-600">
+                                        {aiAnalysis[doc.id].completeness}%
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <h4 className="font-medium text-sm mb-2">پیشنهادات AI:</h4>
+                                    <ul className="space-y-1">
+                                      {aiAnalysis[doc.id].suggestions.map((suggestion: string, i: number) => (
+                                        <li key={i} className="flex items-center gap-2 text-sm">
+                                          <Brain className="w-4 h-4 text-purple-500" />
+                                          {suggestion}
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="text-center py-8 text-gray-500">
+                                  <Scan className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                                  <p>ابتدا فایل آپلود کنید تا تحلیل AI انجام شود</p>
+                                </div>
+                              )}
+                            </TabsContent>
+                          </Tabs>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Sidebar */}
+        <div className="space-y-6">
+          {/* Quick Stats */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">آمار سریع</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {[
+                { label: "تکمیل شده", count: 3, color: "text-green-600", icon: CheckCircle },
+                { label: "در حال بررسی", count: 1, color: "text-blue-600", icon: Eye },
+                { label: "ناقص", count: 2, color: "text-orange-600", icon: AlertCircle },
+                { label: "موجود نیست", count: 2, color: "text-red-600", icon: XCircle },
+              ].map((stat, index) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="flex items-center justify-between"
+                >
+                  <div className="flex items-center gap-2">
+                    {stat.icon.className(`w-5 h-5 ${stat.color}`)}
+                    <span className="text-sm">{stat.label}</span>
+                  </div>
+                  <Badge variant="outline">{stat.count}</Badge>
+                </motion.div>
+              ))}
+            </CardContent>
+          </Card>
+
+          {/* AI Assistant */}
+          <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-purple-700">
+                <Brain className="w-5 h-5" />
+                دستیار هوشمند
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="bg-white p-3 rounded-lg border border-purple-200">
+                <div className="flex items-start gap-2">
+                  <AlertTriangle className="w-5 h-5 text-orange-500 mt-0.5" />
+                  <div className="text-sm">
+                    <p className="font-medium">توجه!</p>
+                    <p className="text-gray-600">مدارک زبان شما منقضی شده است. برای تمدید اقدام کنید.</p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white p-3 rounded-lg border border-purple-200">
+                <div className="flex items-start gap-2">
+                  <CheckCircle className="w-5 h-5 text-green-500 mt-0.5" />
+                  <div className="text-sm">
+                    <p className="font-medium">پیشنهاد</p>
+                    <p className="text-gray-600">مدارک هویتی شما کامل است. می‌توانید به مرحله بعد بروید.</p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Quick Actions */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">اقدامات سریع</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <Button className="w-full justify-start" variant="outline">
+                <Download className="w-4 h-4 mr-2" />
+                دانلود چک‌لیست PDF
+              </Button>
+              <Button className="w-full justify-start" variant="outline">
+                <FileText className="w-4 h-4 mr-2" />
+                راهنمای تکمیل مدارک
+              </Button>
+              <Button className="w-full justify-start" variant="outline">
+                <Brain className="w-4 h-4 mr-2" />
+                مشاوره هوشمند
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  )
+}
